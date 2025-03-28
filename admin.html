@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Secure Login - Bus Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Access Panel</h1>
+    <p class="warning-text">Restricted Access - Authorized Personnel Only</p>
+    <input type="text" class="input-field" placeholder="Admin Username" />
+    <input type="password" class="input-field" placeholder="Password" />
+    <button class="login-btn">Login</button>
+   
+    <p class="security-note">Your IP and login attempts are being logged for security purposes.</p>
+   
+    <!-- Add this link to switch to the Driver Login page -->
+    <p class="switch-login">Not an Admin? <a href="{{ url_for('login_page') }}">Sign In as Driver</a></p>
+  </div>
+</body>
+</html>

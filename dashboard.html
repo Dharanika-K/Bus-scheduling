@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <h1>Follow Your Track!</h1>
+    <h2>Know Your Schedules</h2>
+    
+    <div class="image-container">
+        <div class="file-card">
+            <img src="{{ url_for('static', filename='images/dashboard.png') }}" alt="Dashboard">
+            <button onclick="location.href='{{ url_for('dashboard_page') }}'">DASHBOARD</button>
+        </div>
+        
+        <div class="file-card">
+            <img src="{{ url_for('static', filename='images/schedule.jpg') }}" alt="Schedules">
+            <button onclick="location.href='{{ url_for('myschedules_page') }}'">MY SCHEDULES</button>
+        </div>
+
+        <div class="file-card">
+            <img src="{{ url_for('static', filename='images/notification.svg') }}" alt="Notifications">
+            <button onclick="location.href='{{ url_for('notification_page') }}'">NOTIFICATIONS</button>
+        </div>
+
+        <div class="file-card">
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile">
+            <button onclick="location.href='{{ url_for('profile_page') }}'">MY PROFILE</button>
+        </div>
+
+        <div class="file-card">
+            <img src="{{ url_for('static', filename='images/logout.webp') }}" alt="Log Out">
+            <button onclick="location.href='{{ url_for('logout_page') }}'">LOG OUT</button>
+        </div>
+    </div>
+</body>
+</html>

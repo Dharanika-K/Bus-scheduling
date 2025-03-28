@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome!</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}" />
+</head>
+<body>
+  <div class="landing-container">
+    <h1>Welcome!</h1>
+    <h2>Effortless Scheduling, Smarter Drivers<br>Stay On Track with Our System!</h2>
+
+    <div class="box-container">
+      <div class="box" id="driverBox">
+        <a href="{{ url_for('login_page') }}">
+          <strong>DRIVER</strong>
+        </a>
+      </div>
+
+      <div class="box" id="adminBox">
+        <a href="{{ url_for('admin_page') }}">
+          <strong>ADMIN</strong>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
