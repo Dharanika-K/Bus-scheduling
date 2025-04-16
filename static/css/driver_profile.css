@@ -1,0 +1,133 @@
+/* Reset and body styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f1f9ff;
+}
+
+/* Top bar styling */
+.topbar {
+    background-color: #0077b6;
+    color: white;
+    padding: 15px 25px;
+    font-size: 24px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 200px;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: #023e8a;
+    color: white;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    padding: 20px 15px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    padding-top: 70px;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Sidebar buttons */
+.menu-button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #00b4d8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.menu-button:hover {
+    background-color: #0096c7;
+}
+
+/* Main content area */
+.content {
+    margin-left: 200px;
+    padding: 90px 30px 30px 30px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #90e0ef;
+    color: #023e8a;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f6faff;
+}
+
+/* Input fields in profile page */
+input[type="email"],
+input[type="text"] {
+    width: 90%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* Alert messages */
+.alert {
+    padding: 10px 15px;
+    background-color: #ffdddd;
+    border-left: 6px solid #f44336;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+/* Save button same as sidebar style */
+button[type="submit"] {
+    background-color: #00b4d8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0096c7;
+}

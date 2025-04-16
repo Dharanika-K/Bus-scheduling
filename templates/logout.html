@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logout - Driver</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/logout.css') }}" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Driver Panel</h2>
+    <button class="menu-button" onclick="window.location.href='{{ url_for('dashboard_page') }}'">Dashboard</button>
+    <button class="menu-button" onclick="window.location.href='{{ url_for('driver_profile') }}'">My Profile</button>
+    <button class="menu-button" onclick="window.location.href='{{ url_for('schedule') }}'">My Schedules</button>
+    <button class="menu-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    Bus Management System
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <div class="logout-confirmation">
+      <h2>Are you sure you want to log out?</h2>
+      <p>Click "Yes" to confirm logout or "No" to return to dashboard.</p>
+      <div class="button-container">
+        <button class="btn btn-yes" onclick="window.location.href='{{ url_for('logout') }}'">Yes</button>
+        <button class="btn btn-no" onclick="window.location.href='{{ url_for('dashboard_page') }}'">No</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

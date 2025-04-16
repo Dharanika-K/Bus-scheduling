@@ -1,0 +1,124 @@
+/* Reset and body styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f1f9ff; /* Light blue background */
+}
+
+/* Top bar styling */
+.topbar {
+    background-color: #0077b6; /* Dark blue */
+    color: white;
+    padding: 15px 25px;
+    font-size: 24px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 200px;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: #023e8a; /* Dark blue */
+    color: white;
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    padding: 20px 15px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    padding-top: 70px; /* Space below topbar */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Sidebar buttons */
+.menu-button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #00b4d8; /* Light blue */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+
+.menu-button:hover {
+    background-color: #0096c7; /* Darker blue */
+}
+
+/* Main content area */
+.content {
+    margin-left: 200px;
+    padding: 90px 30px 30px 30px;
+}
+
+/* Logout Confirmation Box */
+.logout-confirmation {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-top: 100px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logout-confirmation h2 {
+    font-size: 24px;
+    color: #023e8a;
+}
+
+.logout-confirmation p {
+    font-size: 16px;
+    margin: 20px 0;
+}
+
+.logout-confirmation .button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.logout-confirmation .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-confirmation .btn-yes {
+    background-color: #00b4d8; /* Light blue */
+    color: white;
+}
+
+.logout-confirmation .btn-yes:hover {
+    background-color: #0096c7; /* Darker blue */
+}
+
+.logout-confirmation .btn-no {
+    background-color: #ff4d4d; /* Red */
+    color: white;
+}
+
+.logout-confirmation .btn-no:hover {
+    background-color: #cc0000; /* Darker red */
+}

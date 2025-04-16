@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password - Bus Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Forgot Password</h1>
+    <p class="instruction">Enter your email address to receive a password reset link.</p>
+   
+    <form id="forgotPasswordForm">
+      <input type="email" class="input-field" id="email" placeholder="Enter your email" required>
+      <button type="submit" class="reset-btn">Send Reset Link</button>
+    </form>
+
+    <p class="back-to-login">
+      <a href="{{ url_for('login_page') }}">Back to Login</a>
+    </p>
+
+    <!-- Success message (hidden by default) -->
+    <div id="successMessage" class="success-message" style="display: none;">
+      ✅ Reset link has been sent to your email!
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("forgotPasswordForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        let email = document.getElementById("email").value;
+
+        if (email) {
+            document.getElementById("successMessage").style.display = "block"; // Show success message
+            setTimeout(() => {
+                window.location.href = "{{ url_for('login_page') }}"; // Redirect after 2 seconds
+            }, 2000);
+        }
+    });
+  </script>
+</body>
+</html>

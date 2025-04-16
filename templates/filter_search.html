@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Filter Driver Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reports1.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Driver Report Filter</h1>
+        <form method="POST" action="/filter-search">
+            <label for="driver_name">Driver Name:</label>
+            <input type="text" name="driver_name" id="driver_name" placeholder="Enter driver name">
+
+            <label for="driver_id">Driver ID:</label>
+            <input type="text" name="driver_id" id="driver_id" placeholder="Enter driver ID">
+
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</body>
+</html>

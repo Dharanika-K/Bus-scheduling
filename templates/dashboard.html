@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <h1>Follow Your Track! 🚍</h1>
+    <h2>Know Your Schedules 📅</h2>
+    
+    <div class="image-container">
+        
+        
+        <div class="file-card">
+            <span class="emoji">📅</span>
+            <button onclick="location.href='{{ url_for('my_schedules') }}'">MY SCHEDULES</button>
+        </div>
+
+        <div class="file-card">
+            <span class="emoji">🔔</span>
+            <button onclick="location.href='{{ url_for('schedule') }}'">NOTIFICATIONS</button>
+        </div>
+
+        <div class="file-card">
+            <span class="emoji">👤</span>
+            <button onclick="location.href='{{ url_for('driver_profile') }}'">MY PROFILE</button>
+        </div>
+
+        <div class="file-card">
+            <span class="emoji">🚪</span>
+            <button onclick="location.href='{{ url_for('logout') }}'">LOG OUT</button>
+        </div>
+    </div>
+</body>
+</html>

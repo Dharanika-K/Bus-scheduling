@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Unscheduling</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/unscheduling2.css') }}">
+</head>
+<body>
+
+    <h2>Updated Driver List</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Driver ID</th>
+                <th>Name</th>
+                <th>Route</th>
+                <th>Shift Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for driver in assigned_drivers %}
+            <tr>
+                <td>{{ driver._id }}</td>
+                <td>{{ driver.name }}</td>
+                <td>{{ driver.route }}</td>
+                <td>{{ driver.shift_time }}</td>
+                <td>
+                    <form action="{{ url_for('unschedule_driver', assignment_id=driver._id) }}" method="POST">
+                        <button type="submit" class="unassign-button">Unassign</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

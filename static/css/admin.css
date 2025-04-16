@@ -1,0 +1,115 @@
+/* Base setup */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f7ff, #cdefff);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container styling */
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-top: 5px solid #0077b6;
+}
+
+/* Headings */
+h1 {
+    font-size: 26px;
+    color: #0077b6;
+    margin-bottom: 25px;
+}
+
+/* Input Fields */
+.input-field {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 2px solid #00b4d8;
+    border-radius: 8px;
+    background-color: #f0faff;
+    font-size: 14px;
+    color: #333;
+    transition: border 0.3s;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #0077b6;
+    background-color: #e7faff;
+}
+
+.input-field::placeholder {
+    color: #666;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #00b4d8;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 15px;
+}
+
+.login-btn:hover {
+    background-color: #0077b6;
+}
+
+/* Flash messages */
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.alert-danger {
+    background-color: #ffdddd;
+    color: #d8000c;
+    border-left: 5px solid #d8000c;
+}
+
+.alert-success {
+    background-color: #ddffdd;
+    color: #4F8A10;
+    border-left: 5px solid #4F8A10;
+}
+
+/* Extra text */
+.security-note {
+    font-size: 12px;
+    color: #777;
+    margin-top: 20px;
+}
+
+.switch-login {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.switch-login a {
+    color: #0077b6;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.switch-login a:hover {
+    text-decoration: underline;
+}

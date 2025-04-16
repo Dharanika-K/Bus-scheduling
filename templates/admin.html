@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Access Panel</h1>
+
+        <!-- Display Error Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="text" name="username" class="input-field" placeholder="Admin Username" required />
+            <input type="password" name="password" class="input-field" placeholder="Password" required />
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <p class="security-note">Your IP and login attempts are being logged for security purposes.</p>
+        <p class="switch-login">Not an Admin? <a href="{{ url_for('login_page') }}">Sign In as Driver</a></p>
+    </div>
+</body>
+</html>

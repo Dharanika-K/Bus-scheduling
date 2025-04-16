@@ -1,0 +1,113 @@
+/* Full-screen layout and background */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(120deg, #caf0f8, #90e0ef);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container for the login box */
+.container {
+    background-color: white;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Main heading */
+.container h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #0077b6;
+}
+
+/* Subheading */
+.container h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #023e8a;
+}
+
+/* Input fields */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #00b4d8;
+    border-radius: 5px;
+    background-color: #f0faff;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: #0077b6;
+    outline: none;
+}
+
+/* Forgot password */
+.forgot-password {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #0077b6;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Login button */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #00b4d8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+    background-color: #0077b6;
+}
+
+/* Signup text */
+.signup {
+    font-size: 14px;
+    margin-top: 15px;
+    color: #555;
+}
+
+.signup a {
+    color: #0077b6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+}
+
+/* Flash alert box */
+.alert {
+    background-color: #ffdddd;
+    color: #a70000;
+    border: 1px solid #ff5e5e;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}

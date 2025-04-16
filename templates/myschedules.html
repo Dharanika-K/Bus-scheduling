@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Schedules</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myschedules.css') }}">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Driver Panel</h2>
+        <a href="{{ url_for('dashboard_page') }}" class="menu-button">Dashboard</a>
+        <a href="{{ url_for('my_schedules') }}" class="menu-button">My Schedules</a>
+        <a href="{{ url_for('driverlogout') }}" class="menu-button">Logout</a>
+    </div>
+
+    <!-- Top bar -->
+    <div class="topbar">
+        Welcome, {{ driver_name }}
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <h1>My Assigned Schedules</h1>
+
+        {% if assignments %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Shift</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for schedule in assignments %}
+                <tr>
+                    <td>{{ schedule.bus_route }}</td>
+                    <td>{{ schedule.shift_time }}</td>
+                    <td>{{ schedule.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No schedules assigned yet.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

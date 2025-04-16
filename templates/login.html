@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Login - Bus Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <h1>User Login</h1>
+
+    <!-- Show Flash Messages for Errors -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      <h2>Driver Login</h2>
+      <input type="text" class="input-field" name="username" placeholder="Username" required />
+      <input type="password" class="input-field" name="password" placeholder="Password" required />
+      <a href="{{ url_for('signin_page') }}" class="forgot-password">Forgot Password?</a>
+      <button class="login-btn" type="submit">Login as Driver</button>
+      <p class="signup">Not a driver? <a href="{{ url_for('admin_page') }}">Login as Admin</a></p>
+      <p class="signup">Don't have an account? <a href="{{ url_for('signup_page') }}">Sign Up</a></p>
+    </form>
+  </div>
+</body>
+</html>

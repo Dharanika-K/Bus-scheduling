@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reports2.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Driver Reports</h1>
+        <a href="/">← Back to Filter</a>
+        {% if results %}
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Driver ID</th>
+                    <th>Contact</th>
+                    <!-- Add more fields as needed -->
+                </tr>
+                {% for r in results %}
+                <tr>
+                    <td>{{ r['name'] }}</td>
+                    <td>{{ r['driver_id'] }}</td>
+                    <td>{{ r['contact'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No matching reports found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

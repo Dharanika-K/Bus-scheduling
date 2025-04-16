@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Scheduling</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scheduling.css') }}">
+</head>
+<body>
+    <div class="topbar">Driver Scheduling</div>
+    
+    <div class="sidebar">
+        <h2>Driver Scheduling</h2>
+        <button class="menu-button" onclick="location.href='{{ url_for('schedule') }}'">Available Driver Table</button>
+        <button class="menu-button" onclick="location.href='{{ url_for('shift_page') }}'">Shift Selection Form</button>
+        <button class="menu-button" onclick="location.href='{{ url_for('admin_dashboard') }}'">Home</button>
+    </div>
+    
+    <div class="content">
+        <table>
+            <tr>
+                <th>S.No</th>
+                <th>Driver Name</th>
+                <th>Driver ID</th>
+                <th>Experience</th>
+                <th>Current Assignment</th>
+                <th>Actions</th>
+            </tr>
+            
+            {% for driver in drivers[:5] %}  <!-- Limit to 5 drivers -->
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ driver.name }}</td>
+                <td>{{ driver._id }}</td>
+                <td>{{ driver.experience }} years</td>
+                <td>{{ "Yes" if driver.status == "Assigned" else "No" }}</td>
+                <td>
+                    {% if driver.status == "Assigned" %}
+                        <!-- Show Unassign Button -->
+                        <form action="{{ url_for('unassign_driver', driver_id=driver._id) }}" method="POST">
+                            <button type="submit" class="unassign-button">Unassign</button>
+                        </form>
+                    {% else %}
+                        <!-- No Assign button here (handled in Shift Selection Form) -->
+                        <span>Available</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

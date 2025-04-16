@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Unscheduling</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/unscheduling.css') }}"> 
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Driver Unscheduling</h2>
+        <button class="menu-button" onclick="location.href='{{ url_for('admin_dashboard') }}'">Home</button>
+    </div>
+        
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search Driver by Name or ID">
+        <button onclick="searchDriver()">Search</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Driver ID</th>
+                <th>Name</th>
+                <th>Route</th>
+                <th>Shift Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="driver-table">
+            {% for driver in assigned_drivers %}
+            <tr>
+                <td>{{ driver.driver_id }}</td>
+                <td>{{ driver.driver_name }}</td>
+                <td>{{ driver.route if driver.route else 'Unknown' }}</td>
+                <td>{{ driver.shift_time }}</td>
+                <td>
+                    <form action="{{ url_for('unschedule_driver', assignment_id=driver._id) }}" method="POST">
+                        <button type="submit" class="unassign-button">Unassign</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function confirmUnassign(event, form) {
+            event.preventDefault();
+
+            if (confirm("Are you sure you want to unassign this driver?")) {
+                form.submit();
+                setTimeout(() => {
+                    alert("Driver has been successfully unassigned!");
+                }, 500);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let unassignButtons = document.querySelectorAll(".unassign-button");
+
+            unassignButtons.forEach(button => {
+                button.addEventListener("click", function (event) {
+                    confirmUnassign(event, this.closest("form"));
+                });
+            });
+        });
+
+        function searchDriver() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.getElementById("driver-table").getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                let driverName = rows[i].getElementsByTagName("td")[1]?.textContent.toLowerCase();
+                let driverID = rows[i].getElementsByTagName("td")[0]?.textContent.toLowerCase();
+
+                if (driverName.includes(input) || driverID.includes(input)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

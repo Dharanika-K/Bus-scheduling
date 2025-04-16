@@ -1,0 +1,63 @@
+/* General Layout */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f6fc;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+/* Dashboard Title */
+.dashboard-title {
+  font-size: 2.5rem;
+  color: #1a73e8;
+  margin-bottom: 40px;
+}
+
+/* Dashboard Button Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Dashboard Buttons */
+.dashboard-btn {
+  background-color: white;
+  color: #1a73e8;
+  border: 2px solid #1a73e8;
+  padding: 20px 15px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.dashboard-btn:hover {
+  background-color: #1a73e8;
+  color: white;
+}
+
+/* Logout Button Style */
+.logout-btn {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}

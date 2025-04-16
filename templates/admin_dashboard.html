@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Bus Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1 class="dashboard-title">🚍 Admin Dashboard</h1>
+
+    <div class="dashboard-grid">
+      <button class="dashboard-btn" onclick="location.href='{{ url_for('schedule') }}'">
+        📅 <span>Schedule Drivers</span>
+      </button>
+
+      <button class="dashboard-btn" onclick="location.href='{{ url_for('unscheduling_page') }}'">
+        ❌ <span>Unschedule Drivers</span>
+      </button>
+
+      <button class="dashboard-btn" onclick="location.href='{{ url_for('filter_search') }}'">
+        📊 <span>Reports</span>
+      </button>
+
+      <button class="dashboard-btn logout-btn" onclick="location.href='{{ url_for('logout_admin') }}'">
+        🚪 <span>Logout</span>
+      </button>
+    </div>
+  </div>
+</body>
+</html>
