@@ -2,38 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Driver</title>
+    <title>Add New Driver</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/add_driver.css') }}">
 </head>
 <body>
-    <h2>Add New Driver</h2>
+    <div class="form-container">
+        <h2>Add New Driver</h2>
 
-    <!-- Success Message (if a driver is added) -->
-    {% if success_message %}
-        <p style="color: green;">{{ success_message }}</p>
-    {% endif %}
+        <form action="{{ url_for('add_driver') }}" method="POST">
+            <label for="name">Driver Name:</label>
+            <input type="text" id="name" name="name" required>
 
-    <form action="{{ url_for('add_driver') }}" method="POST">
-        <label for="name">Driver Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter driver's name" value="{{ request.form.get('name', '') }}" required><br>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
 
-        <label for="route">Route:</label>
-        <input type="text" id="route" name="route" placeholder="Enter route number" value="{{ request.form.get('route', '') }}" required><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
 
-        <label for="availability">Availability:</label>
-        <select id="availability" name="availability">
-            <option value="Available" {% if request.form.get('availability') == "Available" %}selected{% endif %}>Available</option>
-            <option value="Unavailable" {% if request.form.get('availability') == "Unavailable" %}selected{% endif %}>Unavailable</option>
-        </select><br>
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required>
 
-        <label for="experience">Experience (years):</label>
-        <input type="number" id="experience" name="experience" placeholder="Years of experience" min="0" value="{{ request.form.get('experience', '') }}" required><br>
+            <label for="experience">Experience (in years):</label>
+            <input type="number" id="experience" name="experience" min="0" required>
 
-        <button type="submit">Add Driver</button>
-    </form>
+            <label for="availability">Availability:</label>
+            <select id="availability" name="availability" required>
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+            </select>
 
-    <br>
-    <a href="{{ url_for('schedule') }}">Back to Driver Schedule</a>
+            <button type="submit">Add Driver</button>
+        </form>
+
+        <a class="back-link" href="{{ url_for('schedule') }}">← Back to Schedule</a>
+    </div>
 </body>
 </html>

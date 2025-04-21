@@ -61,3 +61,22 @@ body {
 .logout-btn:hover {
   background-color: #c9302c;
 }
+.add-driver-section {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.add-driver-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #00b894;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-driver-btn:hover {
+  background-color: #009e7a;
+}

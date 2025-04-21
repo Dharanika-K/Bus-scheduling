@@ -1,32 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Search Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reports2.css') }}">
+  <meta charset="UTF-8">
+  <title>Driver Reports</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports1.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Driver Reports</h1>
-        <a href="/">← Back to Filter</a>
-        {% if results %}
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Driver ID</th>
-                    <th>Contact</th>
-                    <!-- Add more fields as needed -->
-                </tr>
-                {% for r in results %}
-                <tr>
-                    <td>{{ r['name'] }}</td>
-                    <td>{{ r['driver_id'] }}</td>
-                    <td>{{ r['contact'] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <p>No matching reports found.</p>
-        {% endif %}
-    </div>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+      <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('schedule') }}">Schedule Drivers</a></li>
+      <li><a href="{{ url_for('unscheduling_page') }}">Unschedule Drivers</a></li>
+      <li><a href="{{ url_for('filter_search') }}" class="active">Reports</a></li>
+      <li><a href="{{ url_for('logout_admin') }}">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <h1>📊 Driver Report Filter</h1>
+    <form method="POST">
+      <label>Driver Name:</label>
+      <input type="text" name="driver_name" placeholder="Enter driver name">
+
+      <label>Driver ID:</label>
+      <input type="text" name="driver_id" placeholder="Enter driver ID">
+
+      <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+      <table>
+        <thead>
+          <tr>
+            <th>Driver Name</th>
+            <th>Driver ID</th>
+            <th>Shift Time</th>
+            <th>Bus Route</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+          <tr>
+            <td>{{ result.name }}</td>
+            <td>{{ result.driver_id }}</td>
+            <td>{{ result.shift_time }}</td>
+            <td>{{ result.bus_route }}</td>
+            <td>{{ result.date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p style="color: gray; font-style: italic;">No results found.</p>
+    {% endif %}
+  </div>
 </body>
 </html>

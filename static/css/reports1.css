@@ -1,97 +1,86 @@
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f1f9ff;
-}
-
-.topbar {
-    background-color: #0077b6;
-    color: white;
-    padding: 15px 25px;
-    font-size: 24px;
-    font-weight: bold;
-    position: fixed;
-    top: 0;
-    left: 200px;
-    right: 0;
-    height: 60px;
     display: flex;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.sidebar {
-    background-color: #023e8a;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4faff;
+  }
+  
+  .sidebar {
+    width: 220px;
+    background-color: #0077cc;
     color: white;
-    width: 200px;
     height: 100vh;
-    position: fixed;
-    padding: 20px 15px;
-    box-sizing: border-box;
-    top: 0;
-    left: 0;
-    padding-top: 70px;
-}
-
-.menu-button {
-    display: block;
-    width: 100%;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+  
+  .sidebar h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
     margin: 10px 0;
-    padding: 10px;
-    background-color: #00b4d8;
+  }
+  
+  .sidebar ul li a {
     color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: left;
-}
-
-.menu-button:hover {
-    background-color: #0096c7;
-}
-
-.content {
-    margin-left: 200px;
-    padding: 90px 30px 30px 30px;
-}
-
-.search-container input[type="text"], select, input[type="date"] {
-    padding: 10px;
+    text-decoration: none;
+    padding: 6px 10px;
+    display: block;
+    border-radius: 5px;
+  }
+  
+  .sidebar ul li a.active,
+  .sidebar ul li a:hover {
+    background-color: #005fa3;
+  }
+  
+  .main-content {
+    padding: 40px;
+    width: 100%;
+  }
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"] {
+    padding: 8px;
     margin-right: 10px;
-    margin-top: 10px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-.search-container button {
-    padding: 10px 15px;
-    background-color: #0077b6;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 8px 12px;
+    background-color: #0077cc;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-}
-
-.message {
-    margin-top: 50px;
-    font-size: 28px;
-    color: #023e8a;
-    text-align: center;
-}
-
-.report-details p {
-    font-size: 18px;
-    padding: 6px 0;
-}
-
-.generate-button {
-    padding: 12px 20px;
-    background-color: #0077b6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #005fa3;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
-}
+  }
+  
+  table, th, td {
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+  }
+  

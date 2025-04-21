@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard - Bus Management</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
 </head>
@@ -26,6 +26,10 @@
       <button class="dashboard-btn logout-btn" onclick="location.href='{{ url_for('logout_admin') }}'">
         🚪 <span>Logout</span>
       </button>
+    </div>
+
+    <div class="add-driver-section">
+      <button class="add-driver-btn" onclick="location.href='{{ url_for('add_driver') }}'">➕ Add Driver</button>
     </div>
   </div>
 </body>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message  
 import re
@@ -54,32 +55,50 @@ def assign_driver():
     bus_route = request.form.get('bus_route')
     date = request.form.get('date')
 
-    if not driver_id:
-        return "Driver ID is missing", 400
+    if not all([driver_id, shift_time, bus_route, date]):
+        return "All fields are required!", 400
 
-    # Get driver details including username and password
-    driver = drivers_collection.find_one({"_id": ObjectId(driver_id)})
+    driver_id_obj = ObjectId(driver_id)
 
+    # Check if this driver is already assigned on the selected date
+    existing_assignment = schedules_collection.find_one({
+        "driver_id": driver_id_obj,
+        "date": date
+    })
+
+    if existing_assignment:
+        return render_template("shift.html", message="❌ Driver already assigned on this date.", drivers=list(drivers_collection.find()), routes=["Route A", "Route B", "Route C"])
+
+    # Get the driver name for record
+    driver = drivers_collection.find_one({"_id": driver_id_obj})
     if not driver:
         return "Driver not found", 404
 
-    # Mark as Assigned
-    drivers_collection.update_one({"_id": ObjectId(driver_id)}, {"$set": {"status": "Assigned"}})
-
-    # Include username and password in assignment record
-    assignment = {
-        "driver_id": ObjectId(driver_id),
-        "name": driver.get("name"),
-        "username": driver.get("username"),
-        "password": driver.get("password"),  # It's hashed
+    # Save schedule to DB
+    schedules_collection.insert_one({
+        "driver_id": driver_id_obj,
+        "driver_name": driver['name'],
         "shift_time": shift_time,
         "bus_route": bus_route,
         "date": date
-    }
+    })
 
-    assignments_collection.insert_one(assignment)
+    # Optionally update status if you want
+    drivers_collection.update_one({"_id": driver_id_obj}, {"$set": {"status": "Assigned"}})
 
-    return redirect(url_for('schedule'))
+    return render_template("shift.html", message="✅ Schedule Assigned Successfully!", drivers=list(drivers_collection.find()), routes=["Route A", "Route B", "Route C"])
+
+@app.route('/get_available_drivers/<date>')
+def get_available_drivers(date):
+    assigned_ids = schedules_collection.find({"date": date})
+    assigned_driver_ids = [entry["driver_id"] for entry in assigned_ids]
+
+    available_drivers = drivers_collection.find({
+        "_id": {"$nin": assigned_driver_ids}
+    })
+
+    drivers_data = [{"_id": str(driver["_id"]), "name": driver["name"]} for driver in available_drivers]
+    return jsonify(drivers_data)
 
 
 @app.route('/unassign_driver/<driver_id>', methods=['POST'])
@@ -92,14 +111,29 @@ def add_driver():
     if request.method == 'POST':
         name = request.form.get('name')
         username = request.form.get('username')
-        password = request.form.get('password')
         email = request.form.get('email')
-        
-        if name and username and password and email:
-            hashed_password = generate_password_hash(password)
-            new_driver = {"name": name, "username": username, "password": hashed_password, "email": email, "status": "Unassigned"}
+        phone = request.form.get('phone')
+        experience = request.form.get('experience')
+        availability = request.form.get('availability')
+
+        if name and username and email and phone and experience and availability:
+            # Default password is "password123" (hashed)
+            default_password = generate_password_hash("password123")
+
+            new_driver = {
+                "name": name,
+                "username": username,
+                "email": email,
+                "phone": phone,
+                "experience": int(experience),
+                "availability": availability,
+                "password": default_password,
+                "status": "Unassigned"
+            }
+
             drivers_collection.insert_one(new_driver)
             return redirect(url_for('schedule'))
+
     return render_template('add_driver.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -164,9 +198,10 @@ def dashboard_page():
 
 @app.route('/shift_page')
 def shift_page():
-    available_drivers = list(drivers_collection.find({"status": "Unassigned"}))
+    all_drivers = list(drivers_collection.find({}))
     routes = ["Route A", "Route B", "Route C"]
-    return render_template("shift.html", drivers=available_drivers, routes=routes)
+    return render_template("shift.html", drivers=all_drivers, routes=routes)
+
 
 @app.route('/unscheduling')
 def unscheduling_page():
@@ -223,18 +258,23 @@ def signin_page():
 def filter_search():
     results = []
     if request.method == 'POST':
-        driver_name = request.form.get('driver_name')
-        driver_id = request.form.get('driver_id')
+        driver_name = request.form.get('driver_name', '').strip()
+        driver_id = request.form.get('driver_id', '').strip()
 
         query = {}
         if driver_name:
             query['name'] = {'$regex': driver_name, '$options': 'i'}
         if driver_id:
-            query['driver_id'] = {'$regex': driver_id, '$options': 'i'}
+            try:
+                query['driver_id'] = ObjectId(driver_id)
+            except:
+                flash("Invalid Driver ID format.")
 
-        results = list(collection.find(query))
+        results = list(assignments_collection.find(query))
 
     return render_template('report_results.html', results=results)
+
+
 
 @app.route("/generate_report2", methods=["POST"])
 def generate_report2():
