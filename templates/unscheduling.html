@@ -21,8 +21,8 @@
     <table>
         <thead>
             <tr>
-                <th>Driver ID</th>
                 <th>Name</th>
+                <th>Driver ID</th>
                 <th>Route</th>
                 <th>Shift Time</th>
                 <th>Action</th>
@@ -31,14 +31,15 @@
         <tbody id="driver-table">
             {% for driver in assigned_drivers %}
             <tr>
+                <td>{{ driver.name }}</td>
                 <td>{{ driver.driver_id }}</td>
-                <td>{{ driver.driver_name }}</td>
                 <td>{{ driver.route if driver.route else 'Unknown' }}</td>
                 <td>{{ driver.shift_time }}</td>
                 <td>
                     <form action="{{ url_for('unschedule_driver', assignment_id=driver._id) }}" method="POST">
                         <button type="submit" class="unassign-button">Unassign</button>
                     </form>
+                    
                 </td>
             </tr>
             {% endfor %}
@@ -56,6 +57,7 @@
                 }, 500);
             }
         }
+
 
         document.addEventListener("DOMContentLoaded", function () {
             let unassignButtons = document.querySelectorAll(".unassign-button");
@@ -82,6 +84,7 @@
                 }
             }
         }
+
     </script>
 
 </body>

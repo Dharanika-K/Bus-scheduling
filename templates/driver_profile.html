@@ -14,7 +14,7 @@
   <div class="sidebar">
     <h2>Menu</h2>
     <a href="{{ url_for('dashboard_page') }}"><button class="menu-button">Dashboard</button></a>
-    <a href="{{ url_for('schedule') }}"><button class="menu-button">My Schedules</button></a>
+    <a href="{{ url_for('my_schedules') }}"><button class="menu-button">My Schedules</button></a>
     <a href="{{ url_for('driver_profile') }}"><button class="menu-button">My Profile</button></a>
     <a href="{{ url_for('logout') }}"><button class="menu-button">Logout</button></a>
   </div>
@@ -52,16 +52,25 @@
         </tr>
         <tr>
           <th>Email</th>
-          <td>
-            <input type="email" name="email" value="{{ driver.email }}" required />
-          </td>
+          <td><input type="email" name="email" value="{{ driver.email }}" required /></td>
         </tr>
         <tr>
           <th>Phone</th>
+          <td><input type="text" name="phone" value="{{ driver.phone }}" required /></td>
+        </tr>
+        <tr>
+          <th>Availability</th>
           <td>
-            <input type="text" name="phone" value="{{ driver.phone }}" required />
+            <form method="POST" action="{{ url_for('update_availability') }}">
+              <input type="hidden" name="driver_id" value="{{ driver._id }}">
+              <select name="availability" onchange="this.form.submit()">
+                <option value="Available" {% if driver.status == 'Available' %}selected{% endif %}>Available</option>
+                <option value="Not Available" {% if driver.status == 'Not Available' %}selected{% endif %}>Not Available</option>
+              </select>
+            </form>
           </td>
         </tr>
+        
       </table>
       <br />
       <button type="submit" class="menu-button">Save Changes</button>

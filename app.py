@@ -5,10 +5,11 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message  
 import re
+from datetime import datetime, timedelta
+import calendar
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-app.secret_key = "djmadl2025buschedule"  # Required for session management
-app.secret_key = 'dharanijoemisiadl'
+app.secret_key = "djmadl2025buschedule"  
 
 
 # MongoDB Connection
@@ -16,8 +17,8 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["bus_scheduling"]
 drivers_collection = db["drivers"]
 assignments_collection = db["assignments"]
-collection = db["driver"]
 schedules_collection = db["schedules"]
+
 
 
 # Configure Flask-Mail for Email Notifications
@@ -36,6 +37,7 @@ def home():
 
 @app.route('/schedule')
 def schedule():
+    auto_unassign_old_shifts()
     drivers = list(drivers_collection.find())
     for driver in drivers:
         driver['_id'] = str(driver['_id'])
@@ -54,39 +56,43 @@ def assign_driver():
     shift_time = request.form.get('shift_time')
     bus_route = request.form.get('bus_route')
     date = request.form.get('date')
+    bus_id = request.form.get('bus_id')
 
-    if not all([driver_id, shift_time, bus_route, date]):
-        return "All fields are required!", 400
-
-    driver_id_obj = ObjectId(driver_id)
-
-    # Check if this driver is already assigned on the selected date
-    existing_assignment = schedules_collection.find_one({
-        "driver_id": driver_id_obj,
+    existing_schedule = schedules_collection.find_one({
+        "driver_id": ObjectId(driver_id),
         "date": date
     })
 
-    if existing_assignment:
-        return render_template("shift.html", message="❌ Driver already assigned on this date.", drivers=list(drivers_collection.find()), routes=["Route A", "Route B", "Route C"])
+    if existing_schedule:
+        return render_template("shift.html",
+                               drivers=get_available_drivers(date),
+                               routes=["Route A", "Route B", "Route C"],
+                               message="Driver already assigned for this date.")
 
-    # Get the driver name for record
-    driver = drivers_collection.find_one({"_id": driver_id_obj})
-    if not driver:
-        return "Driver not found", 404
+    driver = drivers_collection.find_one({"_id": ObjectId(driver_id)})
+    if driver and 'name' in driver:
+        driver_name = driver['name']
 
-    # Save schedule to DB
-    schedules_collection.insert_one({
-        "driver_id": driver_id_obj,
-        "driver_name": driver['name'],
-        "shift_time": shift_time,
-        "bus_route": bus_route,
-        "date": date
-    })
+        schedule_data = {
+            "driver_id": ObjectId(driver_id),
+            "driver_name": driver_name,
+            "shift_time": shift_time,
+            "bus_route": bus_route,
+            "date": date,
+            "bus_id": bus_id
+        }
 
-    # Optionally update status if you want
-    drivers_collection.update_one({"_id": driver_id_obj}, {"$set": {"status": "Assigned"}})
+        schedules_collection.insert_one(schedule_data)
+        assignments_collection.insert_one(schedule_data)
 
-    return render_template("shift.html", message="✅ Schedule Assigned Successfully!", drivers=list(drivers_collection.find()), routes=["Route A", "Route B", "Route C"])
+        drivers_collection.update_one(
+            {"_id": ObjectId(driver_id)},
+            {"$set": {"status": "Assigned"}}
+        )
+
+    return redirect(url_for('schedule'))
+
+
 
 @app.route('/get_available_drivers/<date>')
 def get_available_drivers(date):
@@ -136,25 +142,51 @@ def add_driver():
 
     return render_template('add_driver.html')
 
+login_attempts = {}
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = drivers_collection.find_one({"username": username})
-        
-        if user and check_password_hash(user['password'], password):
-            session['username'] = username
-            session['failed_attempts'] = 0  # Reset failed attempts
-            return redirect(url_for('dashboard_page'))
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        session['failed_attempts'] = session.get('failed_attempts', 0) + 1
-        if session['failed_attempts'] >= 3:
-            flash("Too many failed attempts! An email has been sent to your registered email.")
-            send_security_alert(username)
+        # Initialize tracking if not present
+        if username not in login_attempts:
+            login_attempts[username] = {'count': 0, 'lockout_until': None}
+
+        # Check if account is locked
+        if login_attempts[username]['lockout_until']:
+            if datetime.now() < login_attempts[username]['lockout_until']:
+                time_left = (login_attempts[username]['lockout_until'] - datetime.now()).seconds
+                flash(f'Account locked. Try again in {time_left} seconds.')
+                return redirect(url_for('login_page'))
+            else:
+                login_attempts[username] = {'count': 0, 'lockout_until': None}  # Reset lockout after expiry
+
+        # Check credentials in the MongoDB database
+        user = drivers_collection.find_one({'username': username})
+        if user and check_password_hash(user['password'], password):  # Using check_password_hash for security
+            login_attempts[username] = {'count': 0, 'lockout_until': None}  # Reset on success
+
+            # Set the session variable here after successful login
+            session['username'] = username 
+            session['driver_id'] = str(user['_id']) 
+            flash('Login successful!')
+            return redirect(url_for('dashboard_page'))  # Redirect to dashboard page after login
         else:
-            flash("Wrong username or password. Please try again.")
+            login_attempts[username]['count'] += 1
+
+            if login_attempts[username]['count'] >= 3:
+                login_attempts[username]['lockout_until'] = datetime.now() + timedelta(minutes=5)
+                flash('Too many failed attempts. Account locked for 5 minutes.')
+                return redirect(url_for('login_page'))
+
+            attempts_left = 3 - login_attempts[username]['count']
+            flash(f'Invalid credentials. You have {attempts_left} attempts left.')
+            return redirect(url_for('login_page'))
+
     return render_template('login.html')
+
 
 @app.route('/driver/profile', methods=['GET', 'POST'])
 def driver_profile():
@@ -182,6 +214,22 @@ def driver_profile():
 
     return render_template('driver_profile.html', driver=driver)
 
+@app.route('/update_availability', methods=['POST'])
+def update_availability():
+    driver_id = request.form.get('driver_id')
+    if not driver_id:
+        flash("Driver ID missing.")
+        return redirect(url_for('driver_profile'))
+
+    new_status = request.form.get('availability')
+
+    drivers_collection.update_one(
+        {"_id": ObjectId(driver_id)},
+        {"$set": {"availability": new_status}} 
+    )
+
+    return redirect(url_for('driver_profile'))
+
 
 @app.route('/logout')
 def logout():
@@ -189,12 +237,12 @@ def logout():
     flash('You have been logged out successfully.')
     return redirect(url_for('login_page'))
 
-
 @app.route('/dashboard')
 def dashboard_page():
-    if 'username' not in session:
-        return redirect(url_for('login_page'))
-    return render_template('dashboard.html')
+    if 'username' not in session or 'driver_id' not in session:
+        flash("You must be logged in to access the dashboard.")
+        return redirect(url_for('login_page'))  # Redirect to login if not logged in
+    return render_template('dashboard.html')  # Proceed to dashboard if logged in
 
 @app.route('/shift_page')
 def shift_page():
@@ -210,8 +258,8 @@ def unscheduling_page():
     for driver in assigned_drivers:
         driver_data = drivers_collection.find_one({"_id": driver["driver_id"]})
         if driver_data:
-            driver["driver_name"] = driver_data.get("name", "Unknown")  # Ensure name is retrieved
-            driver["route"] = driver_data.get("route", "Not Assigned")  # Ensure route is retrieved
+            driver["name"] = driver_data.get("name", "Unknown")  
+            driver["route"] = driver_data.get("route", "Not Assigned")  
 
     return render_template("unscheduling.html", assigned_drivers=assigned_drivers)
 
@@ -219,13 +267,24 @@ def unscheduling_page():
 @app.route('/unschedule_driver/<assignment_id>', methods=['POST'])
 def unschedule_driver(assignment_id):
     assignment = assignments_collection.find_one({"_id": ObjectId(assignment_id)})
-    
+
     if assignment:
         driver_id = assignment["driver_id"]
+        date = assignment.get("date")  
+
         drivers_collection.update_one({"_id": driver_id}, {"$set": {"status": "Unassigned"}})
+
         assignments_collection.delete_one({"_id": ObjectId(assignment_id)})
+        drivers_collection.delete_one({"_id": ObjectId(assignment_id)})
+
+        if date:
+            schedules_collection.delete_one({
+                "driver_id": driver_id,
+                "date": date
+            })
 
     return redirect(url_for('unscheduling_page'))
+
 
 @app.route('/unscheduling2')
 def unscheduling2_page():
@@ -254,27 +313,42 @@ def admin_page():
 def signin_page():
     return render_template('signin.html')
 
-@app.route('/filter-search', methods=['GET', 'POST'])
-def filter_search():
-    results = []
-    if request.method == 'POST':
-        driver_name = request.form.get('driver_name', '').strip()
-        driver_id = request.form.get('driver_id', '').strip()
 
-        query = {}
-        if driver_name:
-            query['name'] = {'$regex': driver_name, '$options': 'i'}
+
+@app.route('/filter_search', methods=['GET', 'POST'])
+def filter_search():
+    reports = []
+    month = None
+    year = None
+
+    if request.method == 'POST':
+        driver_id = request.form.get('driver_id', '').strip()
+        driver_name = request.form.get('driver_name', '').strip()
+        month = int(request.form.get('month'))
+        year = int(request.form.get('year'))
+
+        start_date = datetime(year, month, 1)
+        end_day = calendar.monthrange(year, month)[1]
+        end_date = datetime(year, month, end_day, 23, 59, 59)
+
+        query = {
+            'date': {
+                '$gte': start_date.strftime("%Y-%m-%d"),
+                '$lte': end_date.strftime("%Y-%m-%d")
+            }
+        }
+
         if driver_id:
             try:
                 query['driver_id'] = ObjectId(driver_id)
             except:
-                flash("Invalid Driver ID format.")
+                pass
+        elif driver_name:
+            query['driver_name'] = {'$regex': driver_name, '$options': 'i'}
 
-        results = list(assignments_collection.find(query))
+        reports = list(assignments_collection.find(query))
 
-    return render_template('report_results.html', results=results)
-
-
+    return render_template('filter_search.html', reports=reports, month=month, year=year)
 
 @app.route("/generate_report2", methods=["POST"])
 def generate_report2():
@@ -328,22 +402,13 @@ def confirm_logout_admin():
 
 @app.route('/my_schedules')
 def my_schedules():
-    if 'username' not in session:
-        return redirect(url_for('login_page'))
+    if 'driver_id' not in session:
+        return redirect(url_for('login_page'))  # Redirect if not logged in
 
-    username = session['username']
-    driver = drivers_collection.find_one({'username': username})
-    
-    if not driver:
-        flash("Driver not found.")
-        return redirect(url_for('login_page'))
+    driver_id = session['driver_id']
+    schedules = list(assignments_collection.find({'driver_id': ObjectId(driver_id)}))
 
-    assignments = list(assignments_collection.find({'driver_id': driver['_id']}))
-    print(assignments)  # Debug line
-
-    return render_template('myschedules.html', assignments=assignments, driver_name=driver['name'])
-
-
+    return render_template('myschedules.html', schedules=schedules)
 
 def send_security_alert(username):
     user = drivers_collection.find_one({"username": username})
@@ -352,10 +417,33 @@ def send_security_alert(username):
         msg.body = f"Dear {username},\n\nWe detected multiple failed login attempts on your account. If this wasn't you, please reset your password immediately.\n\nRegards,\nBus Management System"
         mail.send(msg)
 
-@app.route('/driverlogout')
+from datetime import datetime
+
+def auto_unassign_old_shifts():
+    today = datetime.today().strftime("%Y-%m-%d")
+    
+    expired = assignments_collection.find({"date": {"$lt": today}})
+
+    for assign in expired:
+        drivers_collection.update_one(
+            {"_id": assign["driver_id"]},
+            {"$set": {"status": "Unassigned"}} 
+        )
+        assignments_collection.delete_one({"_id": assign["_id"]})
+
+
+@app.route('/logout')
 def driverlogout():
-    session.pop('driver', None)
-    return redirect('/driverlogin')
+    session.clear()
+    flash('You have been logged out successfully.')
+    return redirect(url_for('login_page'))
+
+@app.route('/cleanup_assignments')
+def cleanup_assignments():
+    # Wipe all existing incorrect assignments from schedules_collection
+    result = schedules_collection.delete_many({})
+    return f"Deleted {result.deleted_count} schedule entries."
+
 
 
 if __name__ == '__main__':

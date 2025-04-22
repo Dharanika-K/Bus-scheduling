@@ -1,53 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
     <title>My Schedules</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/myschedules.css') }}">
 </head>
 <body>
+    <div class="topbar"> Driver Dashboard</div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Driver Panel</h2>
-        <a href="{{ url_for('dashboard_page') }}" class="menu-button">Dashboard</a>
-        <a href="{{ url_for('my_schedules') }}" class="menu-button">My Schedules</a>
-        <a href="{{ url_for('driverlogout') }}" class="menu-button">Logout</a>
-    </div>
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <a href="{{ url_for('dashboard_page') }}" class="sidebar-btn">Dashboard</a>
+            <a href="{{ url_for('my_schedules') }}" class="sidebar-btn">My Schedules</a>
+            <a href="{{ url_for('driver_profile') }}" class="sidebar-btn">My Profile</a>
+            <a href="{{ url_for('logout') }}" class="sidebar-btn">Logout</a>
+        </div>
+        
 
-    <!-- Top bar -->
-    <div class="topbar">
-        Welcome, {{ driver_name }}
-    </div>
-
-    <!-- Main content -->
     <div class="content">
-        <h1>My Assigned Schedules</h1>
-
-        {% if assignments %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Route</th>
-                    <th>Shift</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for schedule in assignments %}
-                <tr>
-                    <td>{{ schedule.bus_route }}</td>
-                    <td>{{ schedule.shift_time }}</td>
-                    <td>{{ schedule.date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h2>My Assigned Schedules</h2>
+        {% if schedules %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Shift</th>
+                        <th>Route</th>
+                        <th>Bus ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in schedules %}
+                        <tr>
+                            <td>{{ s.date }}</td>
+                            <td>{{ s.shift_time }}</td>
+                            <td>{{ s.bus_route }}</td>
+                            <td>{{ s.bus_id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
-        <p>No schedules assigned yet.</p>
+            <p>No schedules assigned yet.</p>
         {% endif %}
     </div>
-
 </body>
 </html>

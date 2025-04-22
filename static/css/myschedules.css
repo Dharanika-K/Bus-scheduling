@@ -37,11 +37,40 @@ body {
   padding-top: 70px; /* space below topbar */
 }
 
-.sidebar h2 {
-  margin-top: 0;
-  font-size: 20px;
-  margin-bottom: 20px;
+.sidebar {
+  background-color: #003366; /* Dark blue */
+  width: 220px;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
+
+.sidebar h2 {
+  color: white;
+  margin-bottom: 30px;
+}
+
+.sidebar-btn {
+  display: block;
+  background-color: #00bcd4; /* Bright cyan-blue */
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.sidebar-btn:hover {
+  background-color: #019db3;
+  transition: 0.3s ease;
+}
+
 
 /* Sidebar buttons */
 .menu-button {

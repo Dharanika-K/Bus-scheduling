@@ -25,18 +25,25 @@
             <p style="color: green;">{{ message }}</p>
         {% endif %}
 
-        <div class="form-group">
-            <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="driver">Select Driver:</label>
-            <select id="driver" name="driver_id" required>
-                <option value="">Select Driver</option>
-                <!-- Options will be loaded dynamically -->
-            </select>
-        </div>        
+        <!-- ✅ FIX: Form tag added here -->
+        <form action="{{ url_for('assign_driver') }}" method="POST">
+            <div class="form-group">
+                <label for="bus-id">Bus ID:</label>
+                <input type="text" id="bus-id" name="bus_id" placeholder="Enter Bus ID" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="driver">Select Driver:</label>
+                <select id="driver" name="driver_id" required>
+                    <option value="">Select Driver</option>
+                    <!-- Options loaded via JS -->
+                </select>
+            </div>        
 
             <div class="form-group">
                 <label for="shift-time">Shift Time:</label>
@@ -58,15 +65,16 @@
                 </select>
             </div>
 
+            <!-- ✅ Submit inside form -->
             <button type="submit" class="submit-box">SUBMIT</button>
         </form>
     </div>
 
     <script>
-        document.getElementById("date").addEventListener("change", function() {
+        document.getElementById("date").addEventListener("change", function () {
             const selectedDate = this.value;
             const driverSelect = document.getElementById("driver");
-    
+
             if (selectedDate) {
                 fetch(`/get_available_drivers/${selectedDate}`)
                     .then(response => response.json())
