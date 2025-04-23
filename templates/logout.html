@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/logout.css') }}" />
 </head>
 <body>
-  <!-- Sidebar -->
+
   <div class="sidebar">
     <h2>Driver Panel</h2>
     <button class="menu-button" onclick="window.location.href='{{ url_for('dashboard_page') }}'">Dashboard</button>
@@ -16,12 +16,11 @@
     <button class="menu-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
   </div>
 
-  <!-- Topbar -->
+
   <div class="topbar">
     Bus Management System
   </div>
 
-  <!-- Main Content -->
   <div class="content">
     <div class="logout-confirmation">
       <h2>Are you sure you want to log out?</h2>

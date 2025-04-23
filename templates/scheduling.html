@@ -27,7 +27,7 @@
                 <th>Actions</th>
             </tr>
             
-            {% for driver in drivers[:5] %}  <!-- Limit to 5 drivers -->
+            {% for driver in drivers[:5] %} 
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ driver.name }}</td>
@@ -36,12 +36,12 @@
                 <td>{{ "Yes" if driver.status == "Assigned" else "No" }}</td>
                 <td>
                     {% if driver.status == "Assigned" %}
-                        <!-- Show Unassign Button -->
+                       
                         <form action="{{ url_for('unassign_driver', driver_id=driver._id) }}" method="POST">
                             <button type="submit" class="unassign-button">Unassign</button>
                         </form>
                     {% else %}
-                        <!-- No Assign button here (handled in Shift Selection Form) -->
+                       
                         <span>Available</span>
                     {% endif %}
                 </td>

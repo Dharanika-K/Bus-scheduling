@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "djmadl2025buschedule"  
 
 
-# MongoDB Connection
+
 client = MongoClient("mongodb://localhost:27017/")
 db = client["bus_scheduling"]
 drivers_collection = db["drivers"]
@@ -21,7 +21,6 @@ schedules_collection = db["schedules"]
 
 
 
-# Configure Flask-Mail for Email Notifications
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587  
 app.config['MAIL_USE_TLS'] = True
@@ -150,29 +149,25 @@ def login_page():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        # Initialize tracking if not present
         if username not in login_attempts:
             login_attempts[username] = {'count': 0, 'lockout_until': None}
 
-        # Check if account is locked
         if login_attempts[username]['lockout_until']:
             if datetime.now() < login_attempts[username]['lockout_until']:
                 time_left = (login_attempts[username]['lockout_until'] - datetime.now()).seconds
                 flash(f'Account locked. Try again in {time_left} seconds.')
                 return redirect(url_for('login_page'))
             else:
-                login_attempts[username] = {'count': 0, 'lockout_until': None}  # Reset lockout after expiry
+                login_attempts[username] = {'count': 0, 'lockout_until': None} 
 
-        # Check credentials in the MongoDB database
         user = drivers_collection.find_one({'username': username})
-        if user and check_password_hash(user['password'], password):  # Using check_password_hash for security
-            login_attempts[username] = {'count': 0, 'lockout_until': None}  # Reset on success
+        if user and check_password_hash(user['password'], password):  
+            login_attempts[username] = {'count': 0, 'lockout_until': None}  
 
-            # Set the session variable here after successful login
             session['username'] = username 
             session['driver_id'] = str(user['_id']) 
             flash('Login successful!')
-            return redirect(url_for('dashboard_page'))  # Redirect to dashboard page after login
+            return redirect(url_for('dashboard_page'))
         else:
             login_attempts[username]['count'] += 1
 
@@ -241,8 +236,8 @@ def logout():
 def dashboard_page():
     if 'username' not in session or 'driver_id' not in session:
         flash("You must be logged in to access the dashboard.")
-        return redirect(url_for('login_page'))  # Redirect to login if not logged in
-    return render_template('dashboard.html')  # Proceed to dashboard if logged in
+        return redirect(url_for('login_page'))  
+    return render_template('dashboard.html')  
 
 @app.route('/shift_page')
 def shift_page():
@@ -403,7 +398,7 @@ def confirm_logout_admin():
 @app.route('/my_schedules')
 def my_schedules():
     if 'driver_id' not in session:
-        return redirect(url_for('login_page'))  # Redirect if not logged in
+        return redirect(url_for('login_page'))  
 
     driver_id = session['driver_id']
     schedules = list(assignments_collection.find({'driver_id': ObjectId(driver_id)}))
@@ -440,7 +435,6 @@ def driverlogout():
 
 @app.route('/cleanup_assignments')
 def cleanup_assignments():
-    # Wipe all existing incorrect assignments from schedules_collection
     result = schedules_collection.delete_many({})
     return f"Deleted {result.deleted_count} schedule entries."
 

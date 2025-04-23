@@ -7,10 +7,9 @@
 </head>
 <body>
 
-  <!-- Top Bar -->
   <div class="topbar">Driver Profile</div>
 
-  <!-- Sidebar -->
+  
   <div class="sidebar">
     <h2>Menu</h2>
     <a href="{{ url_for('dashboard_page') }}"><button class="menu-button">Dashboard</button></a>
@@ -19,7 +18,7 @@
     <a href="{{ url_for('logout') }}"><button class="menu-button">Logout</button></a>
   </div>
 
-  <!-- Main Content -->
+
   <div class="content">
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -57,18 +56,6 @@
         <tr>
           <th>Phone</th>
           <td><input type="text" name="phone" value="{{ driver.phone }}" required /></td>
-        </tr>
-        <tr>
-          <th>Availability</th>
-          <td>
-            <form method="POST" action="{{ url_for('update_availability') }}">
-              <input type="hidden" name="driver_id" value="{{ driver._id }}">
-              <select name="availability" onchange="this.form.submit()">
-                <option value="Available" {% if driver.status == 'Available' %}selected{% endif %}>Available</option>
-                <option value="Not Available" {% if driver.status == 'Not Available' %}selected{% endif %}>Not Available</option>
-              </select>
-            </form>
-          </td>
         </tr>
         
       </table>

@@ -1,4 +1,4 @@
-/* Reset & Base Styles */
+
 body {
   margin: 0;
   padding: 0;
@@ -10,7 +10,7 @@ body {
   height: 100vh;
 }
 
-/* Container */
+
 .container {
   background-color: #ffffff;
   padding: 40px 30px;
@@ -21,14 +21,14 @@ body {
   text-align: center;
 }
 
-/* Heading */
+
 .container h1 {
   margin-bottom: 24px;
   color: #1a73e8;
   font-size: 30px;
 }
 
-/* Input Fields */
+
 .input-field {
   width: 100%;
   padding: 12px;
@@ -44,7 +44,6 @@ body {
   outline: none;
 }
 
-/* Sign Up Button */
 .signup-btn {
   width: 100%;
   padding: 12px;
@@ -62,7 +61,6 @@ body {
   background-color: #155ab6;
 }
 
-/* Signin Link */
 .signin-link {
   margin-top: 20px;
   font-size: 14px;

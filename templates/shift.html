@@ -9,7 +9,6 @@
 <body>
     <div class="topbar">Driver Scheduling</div>
 
-    <!-- Sidebar Menu -->
     <div class="sidebar">
         <h2>Driver Scheduling</h2>
         <button class="menu-item" onclick="location.href='{{ url_for('schedule') }}'">Available Driver Table</button>
@@ -17,7 +16,6 @@
         <button class="menu-item" onclick="location.href='{{ url_for('admin_dashboard') }}'">Home</button>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <h2>Shift Selection Form</h2>
 
@@ -25,7 +23,6 @@
             <p style="color: green;">{{ message }}</p>
         {% endif %}
 
-        <!-- ✅ FIX: Form tag added here -->
         <form action="{{ url_for('assign_driver') }}" method="POST">
             <div class="form-group">
                 <label for="bus-id">Bus ID:</label>
@@ -41,7 +38,6 @@
                 <label for="driver">Select Driver:</label>
                 <select id="driver" name="driver_id" required>
                     <option value="">Select Driver</option>
-                    <!-- Options loaded via JS -->
                 </select>
             </div>        
 
@@ -65,7 +61,6 @@
                 </select>
             </div>
 
-            <!-- ✅ Submit inside form -->
             <button type="submit" class="submit-box">SUBMIT</button>
         </form>
     </div>
