@@ -47,6 +47,7 @@ def unassigned_page():
     unassigned_drivers = list(drivers_collection.find({"status": "Unassigned"}))
     for driver in unassigned_drivers:
         driver['_id'] = str(driver['_id'])
+    flash('Driver successfully unassigned!')
     return render_template('unassigned.html', drivers=unassigned_drivers)
 
 @app.route('/assign_driver', methods=['POST'])
@@ -88,7 +89,7 @@ def assign_driver():
             {"_id": ObjectId(driver_id)},
             {"$set": {"status": "Assigned"}}
         )
-
+    flash('Driver successfully assigned!')
     return redirect(url_for('schedule'))
 
 
@@ -109,6 +110,7 @@ def get_available_drivers(date):
 @app.route('/unassign_driver/<driver_id>', methods=['POST'])
 def unassign_driver(driver_id):
     drivers_collection.update_one({"_id": ObjectId(driver_id)}, {"$set": {"status": "Unassigned"}})
+    flash('Driver successfully unassigned!')
     return redirect(url_for('unassigned_page'))
 
 @app.route('/add_driver', methods=['GET', 'POST'])
@@ -122,7 +124,7 @@ def add_driver():
         availability = request.form.get('availability')
 
         if name and username and email and phone and experience and availability:
-            # Default password is "password123" (hashed)
+           
             default_password = generate_password_hash("password123")
 
             new_driver = {
@@ -183,31 +185,50 @@ def login_page():
     return render_template('login.html')
 
 
-@app.route('/driver/profile', methods=['GET', 'POST'])
+
+
+@app.route('/driver_profile', methods=['GET', 'POST'])
 def driver_profile():
-    if 'username' not in session:
+    if 'driver_id' not in session:
+        flash("Please log in first.")
         return redirect(url_for('login_page'))
 
-    username = session['username']
-    driver = drivers_collection.find_one({'username': username})
+    driver_id = session['driver_id']
+    driver = drivers_collection.find_one({'_id': ObjectId(driver_id)})
+
+    if not driver:
+        flash("Driver not found.")
+        return redirect(url_for('login_page'))
 
     if request.method == 'POST':
-        email = request.form.get('email')
-        phone = request.form.get('phone')
+        updated_fields = {
+            'email': request.form['email'],
+            'phone': request.form['phone']
+        }
 
-        if not re.match(r'^\S+@\S+\.\S+$', email):
-            flash("Invalid email format")
-        elif not re.match(r'^\d{10}$', phone):
-            flash("Invalid phone number format (should be 10 digits)")
-        else:
-            drivers_collection.update_one(
-                {'username': username},
-                {'$set': {'email': email, 'phone': phone}}
-            )
-            flash("Profile updated successfully!")
-            return redirect(url_for('driver_profile'))
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if current_password or new_password or confirm_password:
+            if not current_password or not check_password_hash(driver['password'], current_password):
+                flash("Current password is incorrect.")
+            elif new_password != confirm_password:
+                flash("New passwords do not match.")
+            else:
+                updated_fields['password'] = generate_password_hash(new_password)
+                flash("Password updated successfully.")
+
+        drivers_collection.update_one(
+            {'_id': ObjectId(driver_id)},
+            {'$set': updated_fields}
+        )
+
+        flash("Profile updated successfully.")
+        return redirect(url_for('driver_profile'))
 
     return render_template('driver_profile.html', driver=driver)
+
 
 @app.route('/update_availability', methods=['POST'])
 def update_availability():
@@ -225,6 +246,12 @@ def update_availability():
 
     return redirect(url_for('driver_profile'))
 
+def get_logged_in_driver():
+    driver_id = session.get('driver_id')
+    if not driver_id:
+        return None
+    driver = drivers_collection.find_one({'_id': ObjectId(driver_id)})
+    return driver
 
 @app.route('/logout')
 def logout():
@@ -255,7 +282,7 @@ def unscheduling_page():
         if driver_data:
             driver["name"] = driver_data.get("name", "Unknown")  
             driver["route"] = driver_data.get("route", "Not Assigned")  
-
+    
     return render_template("unscheduling.html", assigned_drivers=assigned_drivers)
 
 
@@ -277,7 +304,7 @@ def unschedule_driver(assignment_id):
                 "driver_id": driver_id,
                 "date": date
             })
-
+    flash('Driver successfully unassigned!')
     return redirect(url_for('unscheduling_page'))
 
 

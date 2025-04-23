@@ -45,6 +45,7 @@
                 </td>
             </tr>
             {% endfor %}
+
         </tbody>
     </table>
 
@@ -88,6 +89,14 @@
         }
 
     </script>
-
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert">
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
 </body>
 </html>

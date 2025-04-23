@@ -9,7 +9,6 @@
 
   <div class="topbar">Driver Profile</div>
 
-  
   <div class="sidebar">
     <h2>Menu</h2>
     <a href="{{ url_for('dashboard_page') }}"><button class="menu-button">Dashboard</button></a>
@@ -17,7 +16,6 @@
     <a href="{{ url_for('driver_profile') }}"><button class="menu-button">My Profile</button></a>
     <a href="{{ url_for('logout') }}"><button class="menu-button">Logout</button></a>
   </div>
-
 
   <div class="content">
     {% with messages = get_flashed_messages() %}
@@ -57,8 +55,25 @@
           <th>Phone</th>
           <td><input type="text" name="phone" value="{{ driver.phone }}" required /></td>
         </tr>
-        
       </table>
+
+      <br />
+      <h2>Change Password</h2>
+      <table>
+        <tr>
+          <th>Current Password</th>
+          <td><input type="password" name="current_password" /></td>
+        </tr>
+        <tr>
+          <th>New Password</th>
+          <td><input type="password" name="new_password" /></td>
+        </tr>
+        <tr>
+          <th>Confirm New Password</th>
+          <td><input type="password" name="confirm_password" /></td>
+        </tr>
+      </table>
+
       <br />
       <button type="submit" class="menu-button">Save Changes</button>
     </form>
