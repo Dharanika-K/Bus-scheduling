@@ -1,4 +1,4 @@
-/* Full-screen layout and background */
+
 body {
     margin: 0;
     padding: 0;
@@ -10,7 +10,6 @@ body {
     align-items: center;
 }
 
-/* Container for the login box */
 .container {
     background-color: white;
     padding: 40px 30px;
@@ -21,21 +20,18 @@ body {
     text-align: center;
 }
 
-/* Main heading */
 .container h1 {
     font-size: 28px;
     margin-bottom: 15px;
     color: #0077b6;
 }
 
-/* Subheading */
 .container h2 {
     font-size: 20px;
     margin-bottom: 20px;
     color: #023e8a;
 }
 
-/* Input fields */
 .input-field {
     width: 100%;
     padding: 12px;
@@ -52,7 +48,6 @@ body {
     outline: none;
 }
 
-/* Forgot password */
 .forgot-password {
     display: block;
     margin-bottom: 15px;
@@ -65,7 +60,6 @@ body {
     text-decoration: underline;
 }
 
-/* Login button */
 .login-btn {
     width: 100%;
     padding: 12px;
@@ -84,7 +78,6 @@ body {
     background-color: #0077b6;
 }
 
-/* Signup text */
 .signup {
     font-size: 14px;
     margin-top: 15px;
@@ -101,7 +94,6 @@ body {
     text-decoration: underline;
 }
 
-/* Flash alert box */
 .alert {
     background-color: #ffdddd;
     color: #a70000;
