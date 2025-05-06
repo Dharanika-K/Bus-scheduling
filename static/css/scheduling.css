@@ -1,119 +1,213 @@
-
+/* General Body and Layout */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f1f9ff;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #f39c12, #3498db);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
-
+/* Topbar */
 .topbar {
-    background-color: #0077b6;
-    color: white;
-    padding: 15px 25px;
-    font-size: 24px;
-    font-weight: bold;
-    position: fixed;
-    top: 0;
-    left: 200px;
-    right: 0;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #2c3e50;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-
+/* Sidebar Styles */
 .sidebar {
-    background-color: #023e8a;
-    color: white;
-    width: 200px;
-    height: 100vh;
-    position: fixed;
-    padding: 20px 15px;
-    box-sizing: border-box;
-    top: 0;
-    left: 0;
-    padding-top: 70px; 
+  width: 200px;
+  background-color: #34495e;
+  color: white;
+  padding-top: 40px;
+  position: fixed;
+  height: 100%;
+  box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
 .sidebar h2 {
-    margin-top: 0;
-    font-size: 20px;
-    margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-
-.menu-button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #00b4d8;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.3s;
+.sidebar button {
+  width: 100%;
+  padding: 15px;
+  background-color: #3498db;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-.menu-button:hover {
-    background-color: #0096c7;
+.sidebar button:hover {
+  background-color: #2980b9;
 }
 
+/* Content Styles */
 .content {
-    margin-left: 200px;
-    padding: 90px 30px 30px 30px;
+  margin-left: 220px;
+  padding: 40px;
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
 }
 
+h2 {
+  font-size: 1.8rem;
+  color: #34495e;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* Flash Messages */
+.alert {
+  background-color: #e74c3c;
+  color: white;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.alert p {
+  margin: 0;
+}
+
+/* Available Drivers Table */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border-radius: 10px;
-    overflow: hidden;
+  width: 100%;
+  margin-bottom: 40px;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 th, td {
-    padding: 15px 20px;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #90e0ef;
-    color: #023e8a;
-    font-weight: bold;
+  background-color: #3498db;
+  color: white;
+  font-size: 1.1rem;
+}
+
+td {
+  color: #7f8c8d;
 }
 
 tr:hover {
-    background-color: #f6faff;
+  background-color: #ecf0f1;
 }
 
-.unassign-button {
-    padding: 8px 12px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+/* Shift Selection Form */
+form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
-.unassign-button:hover {
-    background-color: #cc0000;
+.form-group {
+  margin-bottom: 20px;
 }
-.alert {
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
-    border-radius: 5px;
-    text-align: center;
+
+label {
+  font-size: 1.1rem;
+  color: #34495e;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #34495e;
+  background-color: #ecf0f1;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+button.submit-box {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+button.submit-box:hover {
+  background-color: #2980b9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  body {
+      flex-direction: column;
   }
-  
+
+  .sidebar {
+      width: 100%;
+      height: auto;
+      padding-top: 20px;
+  }
+
+  .content {
+      margin-left: 0;
+      padding: 20px;
+  }
+
+  table {
+      width: 100%;
+  }
+
+  .form-group {
+      margin-bottom: 15px;
+  }
+
+  button.submit-box {
+      width: 100%;
+  }
+}

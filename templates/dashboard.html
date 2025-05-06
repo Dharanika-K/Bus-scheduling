@@ -9,18 +9,22 @@
 <body>
     <h1>Follow Your Track! 🚍</h1>
     <h2>Know Your Schedules 📅</h2>
-    
+
+    {% if notifications %}
+    <div class="notification-box">
+        <h3>🔔 New Notifications</h3>
+        <ul>
+            {% for notification in notifications %}
+            <li>{{ notification.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <div class="image-container">
-        
-        
         <div class="file-card">
             <span class="emoji">📅</span>
             <button onclick="location.href='{{ url_for('my_schedules') }}'">MY SCHEDULES</button>
-        </div>
-
-        <div class="file-card">
-            <span class="emoji">🔔</span>
-            <button onclick="location.href='{{ url_for('schedule') }}'">NOTIFICATIONS</button>
         </div>
 
         <div class="file-card">

@@ -1,83 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Driver Profile</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/driver_profile.css') }}">
+    <meta charset="UTF-8">
+    <title>Driver Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/driver_profile.css') }}">
 </head>
 <body>
+    <div class="topbar">Driver Profile</div>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="{{ url_for('dashboard_page') }}"><button class="menu-button">Dashboard</button></a>
+        <a href="{{ url_for('my_schedules') }}"><button class="menu-button">My Schedules</button></a>
+        <a href="{{ url_for('driver_profile') }}"><button class="menu-button">My Profile</button></a>
+        <a href="{{ url_for('logout') }}"><button class="menu-button">Logout</button></a>
+    </div>
 
-  <div class="topbar">Driver Profile</div>
-
-  <div class="sidebar">
-    <h2>Menu</h2>
-    <a href="{{ url_for('dashboard_page') }}"><button class="menu-button">Dashboard</button></a>
-    <a href="{{ url_for('my_schedules') }}"><button class="menu-button">My Schedules</button></a>
-    <a href="{{ url_for('driver_profile') }}"><button class="menu-button">My Profile</button></a>
-    <a href="{{ url_for('logout') }}"><button class="menu-button">Logout</button></a>
-  </div>
-
-  <div class="content">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
+    <div class="content">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
         <div class="alert">
-          {% for message in messages %}
+            {% for message in messages %}
             <p style="color: red;">{{ message }}</p>
-          {% endfor %}
+            {% endfor %}
         </div>
-      {% endif %}
-    {% endwith %}
+        {% endif %}
+        {% endwith %}
 
-    <h2>Profile Details</h2>
-    <form method="POST">
-      <table>
-        <tr>
-          <th>Name</th>
-          <td>{{ driver.name }}</td>
-        </tr>
-        <tr>
-          <th>Username</th>
-          <td>{{ driver.username }}</td>
-        </tr>
-        <tr>
-          <th>Route</th>
-          <td>{{ driver.route }}</td>
-        </tr>
-        <tr>
-          <th>Experience</th>
-          <td>{{ driver.experience }} years</td>
-        </tr>
-        <tr>
-          <th>Email</th>
-          <td><input type="email" name="email" value="{{ driver.email }}" required /></td>
-        </tr>
-        <tr>
-          <th>Phone</th>
-          <td><input type="text" name="phone" value="{{ driver.phone }}" required /></td>
-        </tr>
-      </table>
+        <h2>Profile Details</h2>
+        <form method="POST">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ driver.name }}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>{{ driver.username }}</td>
+                </tr>
+                <tr>
+                    <th>Route</th>
+                    <td>{{ driver.route }}</td>
+                </tr>
+                <tr>
+                    <th>Experience</th>
+                    <td>{{ driver.experience }} years</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td><input type="email" name="email" value="{{ driver.email }}" required /></td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td><input type="text" name="phone" value="{{ driver.phone }}" required /></td>
+                </tr>
+                <tr>
+                    <th>Availability Status</th>
+                    <td>
+                        <label for="available">Available</label>
+                        <input type="radio" id="available" name="availability_status" value="available" {% if driver.availability_status == 'available' %}checked{% endif %}>
+                        <label for="unavailable">Unavailable</label>
+                        <input type="radio" id="unavailable" name="availability_status" value="unavailable" {% if driver.availability_status == 'unavailable' %}checked{% endif %}>
+                    </td>
+                </tr>
+            </table>
 
-      <br />
-      <h2>Change Password</h2>
-      <table>
-        <tr>
-          <th>Current Password</th>
-          <td><input type="password" name="current_password" /></td>
-        </tr>
-        <tr>
-          <th>New Password</th>
-          <td><input type="password" name="new_password" /></td>
-        </tr>
-        <tr>
-          <th>Confirm New Password</th>
-          <td><input type="password" name="confirm_password" /></td>
-        </tr>
-      </table>
+            <br />
+            <h2>Change Password</h2>
+            <table>
+                <tr>
+                    <th>Current Password</th>
+                    <td><input type="password" name="current_password" /></td>
+                </tr>
+                <tr>
+                    <th>New Password</th>
+                    <td><input type="password" name="new_password" /></td>
+                </tr>
+                <tr>
+                    <th>Confirm New Password</th>
+                    <td><input type="password" name="confirm_password" /></td>
+                </tr>
+            </table>
 
-      <br />
-      <button type="submit" class="menu-button">Save Changes</button>
-    </form>
-  </div>
-
+            <br />
+            <button type="submit" class="menu-button">Save Changes</button>
+        </form>
+    </div>
 </body>
 </html>

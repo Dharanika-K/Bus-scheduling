@@ -1,129 +1,114 @@
-
+/* General Body Styles */
 body {
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f8ff;
-}
-
-/* Top Bar */
-.topbar {
-    background-color: #0077b6;
-    color: white;
-    padding: 15px 25px;
-    font-size: 24px;
-    font-weight: bold;
-    position: fixed;
-    top: 0;
-    left: 200px;
-    right: 0;
-    height: 60px;
+    background-color: #f9f9f9;
     display: flex;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    min-height: 100vh;
 }
 
-/* Sidebar */
+/* Sidebar Styles for Shift Selection */
 .sidebar {
-    background-color: #023e8a;
-    color: white;
-    width: 200px;
+    width: 250px;
     height: 100vh;
+    background-color: #2c3e50;
     position: fixed;
-    padding: 20px 15px;
-    box-sizing: border-box;
-    top: 0;
-    left: 0;
-    padding-top: 70px;
+    color: white;
+    padding-top: 20px;
 }
 
 .sidebar h2 {
-    margin-top: 0;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-.menu-item {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #00b4d8;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.3s;
-}
-
-.menu-item:hover {
-    background-color: #0096c7;
-}
-
-/* Main Content */
-.content {
-    margin-left: 200px;
-    padding: 90px 30px 30px 30px;
-    max-width: 700px;
-}
-
-.content h2 {
-    color: #023e8a;
+    text-align: center;
+    font-size: 1.8rem;
     margin-bottom: 30px;
 }
 
-/* Form Styles */
-form {
-    background-color: #ffffff;
-    padding: 25px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.sidebar ul li {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #34495e;
 }
 
-label {
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1rem;
     display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #333;
 }
 
-select, input[type="date"] {
+.sidebar ul li a:hover {
+    background-color: #3498db;
+}
+
+.sidebar ul li a.active {
+    background-color: #2980b9;
+}
+
+/* Content Styles for Shift Selection */
+.content {
+    margin-left: 250px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* Shift Selection Box */
+.select-box {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.select-box input, .select-box select {
     width: 100%;
     padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
-select:focus, input[type="date"]:focus {
-    border-color: #0077b6;
-    outline: none;
-}
-
-/* Submit Button */
-.submit-box {
-    background-color: #0077b6;
+.select-box button {
+    grid-column: span 2;
+    background-color: #3498db;
     color: white;
-    padding: 12px 18px;
+    padding: 12px;
     border: none;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.submit-box:hover {
-    background-color: #005f8e;
+.select-box button:hover {
+    background-color: #2980b9;
 }
 
-/* Success message styling */
-p[style*="color: green"] {
-    font-weight: bold;
-    margin-bottom: 20px;
+/* Responsive Design for Shift Selection */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding-top: 20px;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    .select-box {
+        grid-template-columns: 1fr;
+    }
 }

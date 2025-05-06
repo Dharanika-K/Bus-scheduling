@@ -1,63 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Scheduling</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/scheduling.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Scheduling</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/scheduling.css') }}">
 </head>
 <body>
-    <div class="topbar">Driver Scheduling</div>
-    
-    <div class="sidebar">
-        <h2>Driver Scheduling</h2>
-        <button class="menu-button" onclick="location.href='{{ url_for('schedule') }}'">Available Driver Table</button>
-        <button class="menu-button" onclick="location.href='{{ url_for('shift_page') }}'">Shift Selection Form</button>
-        <button class="menu-button" onclick="location.href='{{ url_for('admin_dashboard') }}'">Home</button>
-    </div>
-    
-    <div class="content">
-        <table>
-            <tr>
-                <th>S.No</th>
-                <th>Driver Name</th>
-                <th>Driver ID</th>
-                <th>Experience</th>
-                <th>Current Assignment</th>
-                <th>Actions</th>
-            </tr>
-            
-            {% for driver in drivers[:5] %} 
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ driver.name }}</td>
-                <td>{{ driver._id }}</td>
-                <td>{{ driver.experience }} years</td>
-                <td>{{ "Yes" if driver.status == "Assigned" else "No" }}</td>
-                <td>
-                    {% if driver.status == "Assigned" %}
-                       
-                        <form action="{{ url_for('unassign_driver', driver_id=driver._id) }}" method="POST">
-                            <button type="submit" class="unassign-button">Unassign</button>
-                        </form>
-                    {% else %}
-                       
-                        <span>Available</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-        {% with messages = get_flashed_messages() %}
-    {% if messages %}
+  <div class="topbar">Driver Scheduling</div>
+
+  <div class="sidebar">
+    <h2>Driver Scheduling</h2>
+    <button class="menu-button" onclick="location.href='{{ url_for('admin_dashboard') }}'">Home</button>
+  </div>
+
+  <div class="content">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
         <div class="alert">
-        {% for message in messages %}
+          {% for message in messages %}
             <p style="color: green;">{{ message }}</p>
-        {% endfor %}
+          {% endfor %}
         </div>
-    {% endif %}
+      {% endif %}
     {% endwith %}
 
+    <h2>Available Drivers</h2>
+    <table>
+      <tr>
+        <th>S.No</th>
+        <th>Driver Name</th>
+        <th>Driver ID</th>
+        <th>Experience</th>
+        <th>Current Assignment</th>
+      </tr>
+      {% for driver in drivers %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ driver.name }}</td>
+        <td>{{ driver._id }}</td>
+        <td>{{ driver.experience }} years</td>
+        <td>{{ "Yes" if driver.status == "Assigned" else "No" }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>Shift Selection Form</h2>
+    <form action="{{ url_for('assign_driver') }}" method="POST">
+      <div class="form-group">
+        <label for="bus-id">Bus ID:</label>
+        <input type="text" id="bus-id" name="bus_id" required>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="driver">Select Driver:</label>
+        <select id="driver" name="driver_id" required>
+          <option value="">Select Driver</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="shift-time">Shift Time:</label>
+        <select id="shift-time" name="shift_time" required>
+          <option value="">Select Shift</option>
+          <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
+          <option value="Night">Night</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="bus-route">Bus Route:</label>
+        <select id="bus-route" name="bus_route" required>
+          <option value="">Select Route</option>
+          <option value="Route A">Route A</option>
+          <option value="Route B">Route B</option>
+          <option value="Route C">Route C</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-box">SUBMIT</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("date").addEventListener("change", function () {
+      const selectedDate = this.value;
+      const driverSelect = document.getElementById("driver");
+
+      if (selectedDate) {
+        fetch(`/get_available_drivers/${selectedDate}`)
+          .then(response => response.json())
+          .then(data => {
+            driverSelect.innerHTML = '<option value="">Select Driver</option>';
+            data.forEach(driver => {
+              const option = document.createElement("option");
+              option.value = driver._id;
+              option.text = driver.name;
+              driverSelect.appendChild(option);
+            });
+          });
+      }
+    });
+  </script>
 </body>
 </html>

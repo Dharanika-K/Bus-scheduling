@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #74ebd5, #acb6e5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,92 +12,55 @@ body {
 
 .landing-container {
   text-align: center;
-  padding: 60px 50px;
-  background: #ffffff;
-  border-radius: 25px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  max-width: 500px;
-  width: 90%;
-  transition: transform 0.3s;
+  color: #2c3e50;
+  animation: fadeIn 1s ease-in-out;
 }
 
-.landing-container:hover {
-  transform: scale(1.01);
+h1 {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+  color: #34495e;
 }
 
-.landing-container h1 {
-  font-size: 40px;
-  color: #023e8a;
-  margin-bottom: 5px;
-  font-style: italic;
+h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
-
-.landing-container h2 {
-  font-size: 38px;
-  color: #023e8a;
-  margin-bottom: 12px;
-}
-
-.landing-container h3 {
-  font-size: 20px;
-  color: #0077b6;
-  font-weight: 500;
-  margin-bottom: 35px;
-  line-height: 1.4;
+h3 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 40px;
+  line-height: 1.6;
 }
 
 .box-container {
   display: flex;
   justify-content: center;
-  gap: 35px;
-  flex-wrap: wrap;
+  gap: 30px;
 }
 
 .box {
-  width: 130px;
-  height: 130px;
-  background: linear-gradient(135deg, #00b4d8, #0096c7);
-  color: white;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.box:hover {
-  transform: translateY(-5px) scale(1.05);
-  background: linear-gradient(135deg, #0077b6, #023e8a);
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .box a {
-  color: white;
   text-decoration: none;
-  font-size: 20px;
+  color: #2c3e50;
+  font-size: 1.3rem;
   font-weight: bold;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-@media (max-width: 500px) {
-  .box-container {
-    flex-direction: column;
-    gap: 20px;
-  }
+.box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
 
-  .box {
-    width: 100%;
-    height: 60px;
-  }
-
-  .box a {
-    font-size: 18px;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

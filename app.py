@@ -37,10 +37,14 @@ def home():
 @app.route('/schedule')
 def schedule():
     auto_unassign_old_shifts()
-    drivers = list(drivers_collection.find())
-    for driver in drivers:
+
+    available_drivers = list(drivers_collection.find({
+        "availability_status": "available"
+    }))
+    for driver in available_drivers:
         driver['_id'] = str(driver['_id'])
-    return render_template('scheduling.html', drivers=drivers)
+
+    return render_template('scheduling.html', drivers=available_drivers)
 
 @app.route('/unassigned')
 def unassigned_page():
@@ -49,6 +53,7 @@ def unassigned_page():
         driver['_id'] = str(driver['_id'])
     flash('Driver successfully unassigned!')
     return render_template('unassigned.html', drivers=unassigned_drivers)
+ 
 
 @app.route('/assign_driver', methods=['POST'])
 def assign_driver():
@@ -85,26 +90,37 @@ def assign_driver():
         schedules_collection.insert_one(schedule_data)
         assignments_collection.insert_one(schedule_data)
 
+        notification_message = f"You have been assigned a shift on {date} for {bus_route} during {shift_time}."
         drivers_collection.update_one(
             {"_id": ObjectId(driver_id)},
-            {"$set": {"status": "Assigned"}}
+            {
+                "$set": {"status": "Assigned"},
+                "$push": {
+                    "notifications": {
+                        "message": notification_message,
+                        "read": False
+                    }
+                }
+            }
         )
+
     flash('Driver successfully assigned!')
     return redirect(url_for('schedule'))
 
 
-
 @app.route('/get_available_drivers/<date>')
 def get_available_drivers(date):
-    assigned_ids = schedules_collection.find({"date": date})
-    assigned_driver_ids = [entry["driver_id"] for entry in assigned_ids]
+    assigned_entries = schedules_collection.find({"date": date})
+    assigned_driver_ids = [entry["driver_id"] for entry in assigned_entries]
 
     available_drivers = drivers_collection.find({
-        "_id": {"$nin": assigned_driver_ids}
+        "_id": {"$nin": assigned_driver_ids},
+        "availability_status": "available"
     })
 
     drivers_data = [{"_id": str(driver["_id"]), "name": driver["name"]} for driver in available_drivers]
     return jsonify(drivers_data)
+
 
 
 @app.route('/unassign_driver/<driver_id>', methods=['POST'])
@@ -185,49 +201,41 @@ def login_page():
     return render_template('login.html')
 
 
-
-
 @app.route('/driver_profile', methods=['GET', 'POST'])
 def driver_profile():
-    if 'driver_id' not in session:
-        flash("Please log in first.")
+    if 'username' not in session or 'driver_id' not in session:
+        flash('You must be logged in to view this page.')
         return redirect(url_for('login_page'))
 
     driver_id = session['driver_id']
-    driver = drivers_collection.find_one({'_id': ObjectId(driver_id)})
-
-    if not driver:
-        flash("Driver not found.")
-        return redirect(url_for('login_page'))
+    driver = db.drivers.find_one({'_id': ObjectId(driver_id)})
 
     if request.method == 'POST':
-        updated_fields = {
-            'email': request.form['email'],
-            'phone': request.form['phone']
-        }
+        email = request.form['email']
+        phone = request.form['phone']
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        availability_status = request.form['availability_status']
 
-        current_password = request.form.get('current_password')
-        new_password = request.form.get('new_password')
-        confirm_password = request.form.get('confirm_password')
-
-        if current_password or new_password or confirm_password:
-            if not current_password or not check_password_hash(driver['password'], current_password):
-                flash("Current password is incorrect.")
-            elif new_password != confirm_password:
-                flash("New passwords do not match.")
-            else:
-                updated_fields['password'] = generate_password_hash(new_password)
-                flash("Password updated successfully.")
-
-        drivers_collection.update_one(
+        if current_password and new_password == confirm_password:
+          
+            hashed_new_password = generate_password_hash(new_password)
+            db.drivers.up
+        db.drivers.update_one(
             {'_id': ObjectId(driver_id)},
-            {'$set': updated_fields}
+            {'$set': {
+                'email': email,
+                'phone': phone,
+                'availability_status': availability_status
+            }}
         )
 
-        flash("Profile updated successfully.")
+        flash('Profile updated successfully.')
         return redirect(url_for('driver_profile'))
 
     return render_template('driver_profile.html', driver=driver)
+
 
 
 @app.route('/update_availability', methods=['POST'])
@@ -261,16 +269,36 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard_page():
-    if 'username' not in session or 'driver_id' not in session:
-        flash("You must be logged in to access the dashboard.")
-        return redirect(url_for('login_page'))  
-    return render_template('dashboard.html')  
+    driver_id = session.get('driver_id')
+    if not driver_id:
+        flash('Please log in to access the dashboard.')
+        return redirect(url_for('login_page'))
+
+    driver = drivers_collection.find_one({'_id': ObjectId(driver_id)})
+
+    valid_notifications = []
+    if driver and 'notifications' in driver:
+        for notif in driver['notifications']:
+            if not notif.get("expiry_date"):  
+                valid_notifications.append(notif)
+            else:
+                try:
+                    expiry = datetime.strptime(notif['expiry_date'], '%Y-%m-%d')
+                    if expiry >= datetime.now():
+                        valid_notifications.append(notif)
+                except Exception:
+                    valid_notifications.append(notif) 
+
+    return render_template('dashboard.html', notifications=valid_notifications)
+
 
 @app.route('/shift_page')
 def shift_page():
-    all_drivers = list(drivers_collection.find({}))
+    available_drivers = list(drivers_collection.find({
+        "availability_status": "available"
+    }))
     routes = ["Route A", "Route B", "Route C"]
-    return render_template("shift.html", drivers=all_drivers, routes=routes)
+    return render_template("shift.html", drivers=available_drivers, routes=routes)
 
 
 @app.route('/unscheduling')
@@ -334,7 +362,6 @@ def admin_page():
 @app.route('/signin')
 def signin_page():
     return render_template('signin.html')
-
 
 
 @app.route('/filter_search', methods=['GET', 'POST'])

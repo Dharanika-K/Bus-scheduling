@@ -1,80 +1,95 @@
-
+/* General Page Styles */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f2f6fc;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #74ebd5, #acb6e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #333;
 }
 
+/* Dashboard Container */
 .dashboard-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
   text-align: center;
-  padding: 60px 20px;
 }
 
-
+/* Dashboard Title */
 .dashboard-title {
-  font-size: 2.5rem;
-  color: #1a73e8;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+  font-size: 32px;
+  color: #2c3e50;
+  font-weight: 600;
 }
 
-
+/* Grid for Buttons */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-  max-width: 900px;
-  margin: auto;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
+/* Dashboard Buttons */
 .dashboard-btn {
-  background-color: white;
-  color: #1a73e8;
-  border: 2px solid #1a73e8;
-  padding: 20px 15px;
-  font-size: 1.2rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 18px 20px;
+  font-size: 16px;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  flex-direction: column;
+}
+
+.dashboard-btn span {
+  font-weight: 500;
 }
 
 .dashboard-btn:hover {
-  background-color: #1a73e8;
-  color: white;
+  background-color: #2c80b4;
+  transform: translateY(-3px);
 }
 
-/* Logout Button Style */
+/* Special Styling for Logout Button */
 .logout-btn {
-  background-color: #d9534f;
-  color: white;
-  border: none;
+  background-color: #e74c3c;
 }
 
 .logout-btn:hover {
-  background-color: #c9302c;
+  background-color: #c0392b;
 }
+
+/* Add Driver Button */
 .add-driver-section {
-  text-align: center;
   margin-top: 30px;
 }
 
 .add-driver-btn {
-  padding: 12px 24px;
-  font-size: 16px;
-  background-color: #00b894;
+  background-color: #2ecc71;
   color: white;
+  padding: 14px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: background 0.3s ease;
 }
 
 .add-driver-btn:hover {
-  background-color: #009e7a;
+  background-color: #27ae60;
 }

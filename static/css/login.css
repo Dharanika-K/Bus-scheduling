@@ -1,105 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(120deg, #caf0f8, #90e0ef);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
-    background-color: white;
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  text-align: center;
+  animation: fadeInUp 0.7s ease;
 }
 
-.container h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #0077b6;
+h1 {
+  margin-bottom: 10px;
+  font-size: 2.2rem;
+  color: #2c3e50;
 }
 
-.container h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    color: #023e8a;
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #555;
 }
 
 .input-field {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 2px solid #00b4d8;
-    border-radius: 5px;
-    background-color: #f0faff;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s;
 }
 
 .input-field:focus {
-    border-color: #0077b6;
-    outline: none;
-}
-
-.forgot-password {
-    display: block;
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: #0077b6;
-    text-decoration: none;
-}
-
-.forgot-password:hover {
-    text-decoration: underline;
+  border-color: #66a6ff;
 }
 
 .login-btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #00b4d8;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .login-btn:hover {
-    background-color: #0077b6;
-}
-
-.signup {
-    font-size: 14px;
-    margin-top: 15px;
-    color: #555;
-}
-
-.signup a {
-    color: #0077b6;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.signup a:hover {
-    text-decoration: underline;
+  background-color: #2980b9;
 }
 
 .alert {
-    background-color: #ffdddd;
-    color: #a70000;
-    border: 1px solid #ff5e5e;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    font-size: 14px;
+  background-color: #ffe6e6;
+  color: #c0392b;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.forgot-password,
+.signup {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #555;
+}
+
+.forgot-password a,
+.signup a {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
