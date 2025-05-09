@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Profiles</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/view_driver_profiles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🚌 Driver Profiles</h1>
+
+    {% if drivers %}
+      <div class="profiles-grid">
+        {% for driver in drivers %}
+          <div class="profile-card">
+            <h2>{{ driver.name }}</h2>
+            <p><strong>Username:</strong> {{ driver.username }}</p>
+            <p><strong>Email:</strong> {{ driver.email }}</p>
+            <p><strong>Phone:</strong> {{ driver.phone }}</p>
+            <p><strong>Route:</strong> {{ driver.route }}</p>
+            <p><strong>Experience:</strong> {{ driver.experience }} years</p>
+            <p><strong>Status:</strong> {{ driver.status }}</p>
+            <p><strong>Availability:</strong> {{ driver.availability_status }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No drivers available.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

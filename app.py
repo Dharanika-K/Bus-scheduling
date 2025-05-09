@@ -136,11 +136,11 @@ def add_driver():
         username = request.form.get('username')
         email = request.form.get('email')
         phone = request.form.get('phone')
+        license_number = request.form.get('license_number')  # New line
         experience = request.form.get('experience')
         availability = request.form.get('availability')
 
-        if name and username and email and phone and experience and availability:
-           
+        if name and username and email and phone and license_number and experience and availability:
             default_password = generate_password_hash("password123")
 
             new_driver = {
@@ -148,6 +148,7 @@ def add_driver():
                 "username": username,
                 "email": email,
                 "phone": phone,
+                "license_number": license_number, 
                 "experience": int(experience),
                 "availability": availability,
                 "password": default_password,
@@ -158,6 +159,7 @@ def add_driver():
             return redirect(url_for('schedule'))
 
     return render_template('add_driver.html')
+
 
 login_attempts = {}
 
@@ -184,7 +186,6 @@ def login_page():
 
             session['username'] = username 
             session['driver_id'] = str(user['_id']) 
-            flash('Login successful!')
             return redirect(url_for('dashboard_page'))
         else:
             login_attempts[username]['count'] += 1
@@ -219,20 +220,23 @@ def driver_profile():
         availability_status = request.form['availability_status']
 
         if current_password and new_password == confirm_password:
-          
-            hashed_new_password = generate_password_hash(new_password)
-            db.drivers.up
-        db.drivers.update_one(
-            {'_id': ObjectId(driver_id)},
-            {'$set': {
-                'email': email,
-                'phone': phone,
-                'availability_status': availability_status
-            }}
-        )
+            if check_password_hash(driver['password'], current_password):
+                hashed_new_password = generate_password_hash(new_password)
+                db.drivers.update_one(
+                    {'_id': ObjectId(driver_id)},
+                    {'$set': {
+                        'password': hashed_new_password,
+                        'email': email,
+                        'phone': phone,
+                        'availability_status': availability_status
+                    }}
+                )
+                flash('Profile and password updated successfully.')
+                return redirect(url_for('driver_profile'))
+            else:
+                flash('Current password is incorrect.')
+                return redirect(url_for('driver_profile'))
 
-        flash('Profile updated successfully.')
-        return redirect(url_for('driver_profile'))
 
     return render_template('driver_profile.html', driver=driver)
 
@@ -287,7 +291,11 @@ def dashboard_page():
                     if expiry >= datetime.now():
                         valid_notifications.append(notif)
                 except Exception:
-                    valid_notifications.append(notif) 
+                    valid_notifications.append(notif)
+    try:
+        valid_notifications.sort(key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d'))
+    except Exception as e:
+        print("Sorting error:", e)
 
     return render_template('dashboard.html', notifications=valid_notifications)
 
@@ -424,6 +432,8 @@ def generate_report2():
 def admin_dashboard():
     return render_template('admin_dashboard.html')
 
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_page():
     if request.method == 'POST':
@@ -455,9 +465,11 @@ def my_schedules():
         return redirect(url_for('login_page'))  
 
     driver_id = session['driver_id']
-    schedules = list(assignments_collection.find({'driver_id': ObjectId(driver_id)}))
+    
+    schedules = list(assignments_collection.find({'driver_id': ObjectId(driver_id)}).sort('date', 1))  # 1 for ascending order
 
     return render_template('myschedules.html', schedules=schedules)
+
 
 def send_security_alert(username):
     user = drivers_collection.find_one({"username": username})

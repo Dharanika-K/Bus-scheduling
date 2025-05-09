@@ -1,0 +1,98 @@
+/* General Profile Container */
+.profiles-container {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .profiles-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  /* Profile List Styles */
+  .profiles-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .profile-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .profile-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-card h3 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .profile-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  .profile-card a {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #2196f3;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: background 0.3s ease;
+  }
+  
+  .profile-card a:hover {
+    background: #1976d2;
+  }
+  
+  /* Back to Dashboard Button */
+  .back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #009688;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: background 0.3s ease;
+  }
+  
+  .back-btn:hover {
+    background: #00796b;
+  }
+  
+  @media (max-width: 768px) {
+    .profiles-list {
+      grid-template-columns: 1fr;
+    }
+  
+    .profile-card {
+      padding: 15px;
+    }
+  
+    .profiles-title {
+      font-size: 2rem;
+    }
+  }
+  
