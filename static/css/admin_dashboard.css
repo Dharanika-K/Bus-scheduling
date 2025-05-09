@@ -72,13 +72,12 @@ body {
   background-color: #c0392b;
 }
 
-/* Add Driver Button */
 .add-driver-section {
   margin-top: 30px;
 }
 
 .add-driver-btn {
-  background-color: #2ecc71;
+  background-color: #29c66a;
   color: white;
   padding: 14px 24px;
   border: none;

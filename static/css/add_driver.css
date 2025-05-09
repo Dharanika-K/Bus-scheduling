@@ -11,7 +11,6 @@ body {
     justify-content: center;
 }
 
-/* Form container styling */
 .form-container {
     background: rgba(255, 255, 255, 0.95);
     padding: 40px 30px;
@@ -21,7 +20,6 @@ body {
     max-width: 500px;
 }
 
-/* Form heading */
 .form-container h2 {
     margin-bottom: 25px;
     text-align: center;
@@ -29,7 +27,6 @@ body {
     font-weight: 600;
 }
 
-/* Form labels and inputs */
 form label {
     display: block;
     margin: 12px 0 6px;
@@ -55,7 +52,6 @@ form select:focus {
     outline: none;
 }
 
-/* Submit button */
 button[type="submit"] {
     width: 100%;
     background: #2193b0;
@@ -74,7 +70,7 @@ button[type="submit"]:hover {
     background: #176d8b;
 }
 
-/* Back link */
+
 .back-link {
     display: block;
     text-align: center;
