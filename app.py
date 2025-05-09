@@ -18,7 +18,7 @@ db = client["bus_scheduling"]
 drivers_collection = db["drivers"]
 assignments_collection = db["assignments"]
 schedules_collection = db["schedules"]
-
+notifications_collection = db["notifications"]
 
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -219,24 +219,24 @@ def driver_profile():
         confirm_password = request.form['confirm_password']
         availability_status = request.form['availability_status']
 
+        update_data = {
+            'email': email,
+            'phone': phone,
+            'availability_status': availability_status
+        }
+
         if current_password and new_password == confirm_password:
             if check_password_hash(driver['password'], current_password):
                 hashed_new_password = generate_password_hash(new_password)
-                db.drivers.update_one(
-                    {'_id': ObjectId(driver_id)},
-                    {'$set': {
-                        'password': hashed_new_password,
-                        'email': email,
-                        'phone': phone,
-                        'availability_status': availability_status
-                    }}
-                )
+                update_data['password'] = hashed_new_password
                 flash('Profile and password updated successfully.')
-                return redirect(url_for('driver_profile'))
             else:
                 flash('Current password is incorrect.')
                 return redirect(url_for('driver_profile'))
 
+        db.drivers.update_one({'_id': ObjectId(driver_id)}, {'$set': update_data})
+
+        return redirect(url_for('driver_profile'))
 
     return render_template('driver_profile.html', driver=driver)
 
@@ -245,16 +245,33 @@ def driver_profile():
 @app.route('/update_availability', methods=['POST'])
 def update_availability():
     driver_id = request.form.get('driver_id')
+    new_status = request.form.get('availability')
+
     if not driver_id:
         flash("Driver ID missing.")
         return redirect(url_for('driver_profile'))
 
-    new_status = request.form.get('availability')
-
     drivers_collection.update_one(
         {"_id": ObjectId(driver_id)},
-        {"$set": {"availability": new_status}} 
+        {"$set": {"availability": new_status}}
     )
+    if new_status.lower() == "unavailable":
+        unavail_count = notifications_collection.count_documents({
+            "driver_id": ObjectId(driver_id),
+            "type": "driver_unavailable"
+        })
+
+        if unavail_count < 2:
+            driver = drivers_collection.find_one({"_id": ObjectId(driver_id)})
+            driver_name = driver.get("name", "Unknown")
+
+            notifications_collection.insert_one({
+                "driver_id": ObjectId(driver_id),
+                "type": "driver_unavailable",
+                "message": f"Driver {driver_name} marked themselves as unavailable.",
+                "timestamp": datetime.utcnow(),
+                "seen": False
+            })
 
     return redirect(url_for('driver_profile'))
 
@@ -430,8 +447,8 @@ def generate_report2():
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
-    return render_template('admin_dashboard.html')
-
+    notifications = notifications_collection.find({"seen": False}).sort("timestamp", -1)
+    return render_template('admin_dashboard.html', notifications=notifications)
 
 
 @app.route('/signup', methods=['GET', 'POST'])

@@ -92,3 +92,20 @@ body {
 .add-driver-btn:hover {
   background-color: #27ae60;
 }
+.notifications-section {
+  margin-top: 30px;
+  background-color: #eef6ff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.notification-list {
+  list-style: none;
+  padding: 0;
+}
+
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
