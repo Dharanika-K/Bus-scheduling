@@ -1,95 +1,97 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap');
-
+/* Background */
 body {
   margin: 0;
-  font-family: 'Rubik', sans-serif;
-  background: linear-gradient(135deg, #1d2b64, #f8cdda);
-  height: 100vh;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('../images/bus_background.jpg') no-repeat center center fixed;
+  background-size: cover;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
+/* Container */
 .container {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.75); /* Slightly transparent white */
   padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
   text-align: center;
-  animation: slideDown 0.8s ease;
 }
 
+/* Headings */
 h1 {
-  font-size: 2rem;
-  color: #2c3e50;
   margin-bottom: 20px;
+  color: #333;
+  font-size: 28px;
 }
 
+/* Inputs */
 .input-field {
   width: 100%;
-  padding: 12px;
+  padding: 12px 15px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
 .input-field:focus {
-  border-color: #1d2b64;
+  border-color: #28a745;
+  outline: none;
+  box-shadow: 0 0 5px rgba(40,167,69,0.3);
 }
 
+/* Button */
 .login-btn {
-  background-color: #1d2b64;
-  color: #fff;
-  border: none;
-  padding: 12px;
   width: 100%;
-  border-radius: 8px;
+  padding: 12px;
+  background-color: #28a745;
+  border: none;
+  color: white;
   font-size: 16px;
+  border-radius: 8px;
+  margin-top: 15px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 .login-btn:hover {
-  background-color: #16204f;
+  background-color: #218838;
 }
 
+/* Flash Messages */
 .alert {
-  background-color: #ffe6e6;
-  color: #c0392b;
+  background-color: #fff4f4;
+  color: #c00;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 15px;
   font-size: 14px;
 }
 
+/* Security Note */
 .security-note {
   margin-top: 15px;
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: #777;
 }
 
+/* Switch Login Link */
 .switch-login {
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .switch-login a {
-  color: #1d2b64;
+  color: #007bff;
   text-decoration: none;
-  font-weight: 600;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.switch-login a:hover {
+  text-decoration: underline;
 }

@@ -19,6 +19,7 @@ drivers_collection = db["drivers"]
 assignments_collection = db["assignments"]
 schedules_collection = db["schedules"]
 
+
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587  
 app.config['MAIL_USE_TLS'] = True
@@ -253,25 +254,9 @@ def update_availability():
         {"_id": ObjectId(driver_id)},
         {"$set": {"availability": new_status}}
     )
-    if new_status.lower() == "unavailable":
-        unavail_count = notifications_collection.count_documents({
-            "driver_id": ObjectId(driver_id),
-            "type": "driver_unavailable"
-        })
-
-        if unavail_count < 2:
-            driver = drivers_collection.find_one({"_id": ObjectId(driver_id)})
-            driver_name = driver.get("name", "Unknown")
-
-            notifications_collection.insert_one({
-                "driver_id": ObjectId(driver_id),
-                "type": "driver_unavailable",
-                "message": f"Driver {driver_name} marked themselves as unavailable.",
-                "timestamp": datetime.utcnow(),
-                "seen": False
-            })
 
     return redirect(url_for('driver_profile'))
+
 
 def get_logged_in_driver():
     driver_id = session.get('driver_id')
@@ -422,31 +407,10 @@ def filter_search():
 
     return render_template('filter_search.html', reports=reports, month=month, year=year)
 
-@app.route("/generate_report2", methods=["POST"])
-def generate_report2():
-    driver_name = request.form["driver_name"].strip()
-
-    now = datetime.now()
-    current_month = now.month
-    current_year = now.year
-
-    trips = list(trips_collection.find({
-        "driver_name": driver_name,
-        "date_obj": {
-            "$gte": datetime(current_year, current_month, 1),
-            "$lt": datetime(current_year, current_month + 1, 1) if current_month < 12 else datetime(current_year + 1, 1, 1)
-        }
-    }))
-
-    for trip in trips:
-        trip["date"] = trip["date_obj"].strftime("%Y-%m-%d")
-
-    return render_template("reports2.html", trips=trips, driver_name=driver_name, month=current_month, year=current_year)
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
-    notifications = notifications_collection.find({"seen": False}).sort("timestamp", -1)
-    return render_template('admin_dashboard.html', notifications=notifications)
+    return render_template('admin_dashboard.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])

@@ -1,99 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
+/* Background */
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(120deg, #89f7fe, #66a6ff);
-  height: 100vh;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('../images/bus_background.jpg') no-repeat center center fixed;
+  background-size: cover;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
 .container {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.8);
   padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
   text-align: center;
-  animation: fadeInUp 0.7s ease;
 }
 
+/* Headings */
 h1 {
-  margin-bottom: 10px;
-  font-size: 2.2rem;
-  color: #2c3e50;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 28px;
 }
 
 h2 {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  color: #555;
+  margin: 15px 0;
+  color: #444;
+  font-size: 20px;
 }
 
+/* Inputs */
 .input-field {
   width: 100%;
-  padding: 12px;
+  padding: 12px 15px;
   margin: 10px 0;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.3s;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
 .input-field:focus {
-  border-color: #66a6ff;
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
 }
 
+/* Button */
 .login-btn {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 12px;
   width: 100%;
-  border-radius: 8px;
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  color: white;
   font-size: 16px;
-  margin-top: 10px;
+  border-radius: 8px;
+  margin-top: 15px;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 .login-btn:hover {
-  background-color: #2980b9;
+  background-color: #0056b3;
 }
 
-.alert {
-  background-color: #ffe6e6;
-  color: #c0392b;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.forgot-password,
-.signup {
+/* Links */
+.forgot-password, .signup a {
   display: block;
   margin-top: 10px;
-  font-size: 13px;
-  color: #555;
-}
-
-.forgot-password a,
-.signup a {
-  color: #2980b9;
+  font-size: 14px;
+  color: #007bff;
   text-decoration: none;
+  transition: 0.3s;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.forgot-password:hover, .signup a:hover {
+  text-decoration: underline;
+}
+
+/* Flash message box */
+.alert {
+  background-color: #ffe6e6;
+  color: #cc0000;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
 }
