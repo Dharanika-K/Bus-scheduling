@@ -18,8 +18,6 @@ db = client["bus_scheduling"]
 drivers_collection = db["drivers"]
 assignments_collection = db["assignments"]
 schedules_collection = db["schedules"]
-notifications_collection = db["notifications"]
-
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587  
@@ -136,7 +134,7 @@ def add_driver():
         username = request.form.get('username')
         email = request.form.get('email')
         phone = request.form.get('phone')
-        license_number = request.form.get('license_number')  # New line
+        license_number = request.form.get('license_number') 
         experience = request.form.get('experience')
         availability = request.form.get('availability')
 
