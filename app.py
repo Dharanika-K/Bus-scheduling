@@ -7,6 +7,7 @@ from flask_mail import Mail, Message
 import re
 from datetime import datetime, timedelta
 import calendar
+from itsdangerous import URLSafeTimedSerializer
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "djmadl2025buschedule"  
@@ -23,9 +24,9 @@ schedules_collection = db["schedules"]
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587  
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = '23z317@psgtech.ac.in' 
-app.config['MAIL_PASSWORD'] = 'dd.'  
-app.config['MAIL_DEFAULT_SENDER'] = '23z317@psgtech.ac.in'
+app.config['MAIL_USERNAME'] = 'adldjm2025@gmail.com' 
+app.config['MAIL_PASSWORD'] = 'ijltkhofkyvgsgco'  
+app.config['MAIL_DEFAULT_SENDER'] = 'adldjm2025@gmail.com'
 
 mail = Mail(app)
 
@@ -159,47 +160,61 @@ def add_driver():
 
     return render_template('add_driver.html')
 
-
 login_attempts = {}
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'POST':
-        username = request.form.get('username')
+        username_input = request.form.get('username').strip()
         password = request.form.get('password')
 
-        if username not in login_attempts:
-            login_attempts[username] = {'count': 0, 'lockout_until': None}
+        user = drivers_collection.find_one({'username': {'$regex': f'^{username_input}$', '$options': 'i'}})
+        print(f"Trying login for username: {username_input}")
+        print("User found:", user)
 
-        if login_attempts[username]['lockout_until']:
-            if datetime.now() < login_attempts[username]['lockout_until']:
-                time_left = (login_attempts[username]['lockout_until'] - datetime.now()).seconds
-                flash(f'Account locked. Try again in {time_left} seconds.')
-                return redirect(url_for('login_page'))
-            else:
-                login_attempts[username] = {'count': 0, 'lockout_until': None} 
+        if username_input not in login_attempts:
+            login_attempts[username_input] = {'count': 0, 'lockout_until': None}
 
-        user = drivers_collection.find_one({'username': username})
-        if user and check_password_hash(user['password'], password):  
-            login_attempts[username] = {'count': 0, 'lockout_until': None}  
+        lockout_time = login_attempts[username_input]['lockout_until']
+        if lockout_time and datetime.now() < lockout_time:
+            time_left = (lockout_time - datetime.now()).seconds
+            flash(f'Account locked due to multiple failed attempts. Try again in {time_left} seconds.')
+            return redirect(url_for('login_page'))
+        elif lockout_time and datetime.now() >= lockout_time:
+            login_attempts[username_input] = {'count': 0, 'lockout_until': None}
 
-            session['username'] = username 
-            session['driver_id'] = str(user['_id']) 
+        if user and check_password_hash(user['password'], password):
+            login_attempts[username_input] = {'count': 0, 'lockout_until': None}
+
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            session['username'] = user['username']  
+            session['driver_id'] = str(user['_id'])
+
+            flash('Logged in successfully!')
             return redirect(url_for('dashboard_page'))
-        else:
-            login_attempts[username]['count'] += 1
 
-            if login_attempts[username]['count'] >= 3:
-                login_attempts[username]['lockout_until'] = datetime.now() + timedelta(minutes=5)
+        else:
+            login_attempts[username_input]['count'] += 1
+
+            if login_attempts[username_input]['count'] >= 3:
+                login_attempts[username_input]['lockout_until'] = datetime.now() + timedelta(minutes=5)
                 flash('Too many failed attempts. Account locked for 5 minutes.')
                 return redirect(url_for('login_page'))
 
-            attempts_left = 3 - login_attempts[username]['count']
-            flash(f'Invalid credentials. You have {attempts_left} attempts left.')
+            attempts_left = 3 - login_attempts[username_input]['count']
+            flash(f'Invalid username or password. You have {attempts_left} attempts left.')
             return redirect(url_for('login_page'))
 
     return render_template('login.html')
 
+@app.route('/admin/drivers')
+def view_all_drivers():
+    drivers = list(drivers_collection.find({}, {'password': 0})) 
+    for driver in drivers:
+        driver['_id'] = str(driver['_id'])
+
+    return render_template('admin_all_drivers.html', drivers=drivers)
 
 @app.route('/driver_profile', methods=['GET', 'POST'])
 def driver_profile():
@@ -379,33 +394,46 @@ def filter_search():
     year = None
 
     if request.method == 'POST':
-        driver_id = request.form.get('driver_id', '').strip()
-        driver_name = request.form.get('driver_name', '').strip()
-        month = int(request.form.get('month'))
-        year = int(request.form.get('year'))
+        driver_identifier = request.form.get('driver_identifier', '').strip()
+        month = request.form.get('month')
+        year = request.form.get('year')
 
-        start_date = datetime(year, month, 1)
-        end_day = calendar.monthrange(year, month)[1]
-        end_date = datetime(year, month, end_day, 23, 59, 59)
+        query = {}
+        if driver_identifier:
+            driver = drivers_collection.find_one({
+                "$or": [
+                    {"name": {"$regex": driver_identifier, "$options": "i"}},
+                    {"_id": ObjectId(driver_identifier)} if ObjectId.is_valid(driver_identifier) else {"_id": None}
+                ]
+            })
 
-        query = {
-            'date': {
-                '$gte': start_date.strftime("%Y-%m-%d"),
-                '$lte': end_date.strftime("%Y-%m-%d")
-            }
-        }
+            if driver:
+                query["driver_id"] = driver["_id"]
+            else:
+                flash("Driver not found.")
+                return render_template("filter_search.html", reports=[])
 
-        if driver_id:
+        if month and year:
             try:
-                query['driver_id'] = ObjectId(driver_id)
-            except:
-                pass
-        elif driver_name:
-            query['driver_name'] = {'$regex': driver_name, '$options': 'i'}
+                start_date = datetime(int(year), int(month), 1)
+                end_day = calendar.monthrange(int(year), int(month))[1]
+                end_date = datetime(int(year), int(month), end_day, 23, 59, 59)
 
-        reports = list(assignments_collection.find(query))
+                query["date"] = {
+                    "$gte": start_date.strftime("%Y-%m-%d"),
+                    "$lte": end_date.strftime("%Y-%m-%d")
+                }
+            except Exception as e:
+                flash("Invalid month or year provided.")
+                return render_template("filter_search.html", reports=[])
 
-    return render_template('filter_search.html', reports=reports, month=month, year=year)
+        reports = list(schedules_collection.find(query))
+        for report in reports:
+            report["driver_name"] = drivers_collection.find_one(
+                {"_id": report["driver_id"]}).get("name", "Unknown")
+            report["_id"] = str(report["_id"])
+
+    return render_template("filter_search.html", reports=reports)
 
 
 @app.route('/admin_dashboard')
@@ -483,6 +511,66 @@ def cleanup_assignments():
     result = schedules_collection.delete_many({})
     return f"Deleted {result.deleted_count} schedule entries."
 
+
+s = URLSafeTimedSerializer(app.secret_key)
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = drivers_collection.find_one({'email': email})
+        if user:
+            token = s.dumps(email, salt='password-reset-salt')
+            reset_url = url_for('reset_password', token=token, _external=True)
+            
+            msg = Message("Password Reset Request", recipients=[email])
+            msg.body = f"Click the link below to reset your password:\n{reset_url}\n\nThis link is valid for 15 minutes."
+            mail.send(msg)
+
+            flash("✅ A password reset link has been sent to your email.", "info")
+            return redirect(url_for('login_page'))
+        else:
+            flash("❌ No user found with this email address.", "danger")
+    
+    return render_template('forgot_password.html')
+
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+
+s = URLSafeTimedSerializer(app.secret_key)
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = s.loads(token, salt='password-reset-salt', max_age=3600)
+    except (SignatureExpired, BadSignature):
+        flash("Reset link is invalid or has expired.", "danger")
+        return redirect(url_for('login_page'))
+
+    if request.method == 'POST':
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if new_password != confirm_password:
+            flash("Passwords do not match.", "danger")
+            return redirect(request.url)
+
+        hashed_password = generate_password_hash(new_password)
+        result = drivers_collection.update_one(
+            {'email': email},
+            {'$set': {'password': hashed_password}}
+        )
+
+        if result.modified_count == 0:
+            flash("Password reset failed. User not found.", "danger")
+            return redirect(url_for('login_page'))
+
+        session.pop('reset_email', None)
+        session.pop('token', None)
+
+        flash("Password has been reset successfully. Please log in.", "success")
+        return redirect(url_for('login_page'))
+
+    return render_template('reset_password.html', token=token)
 
 
 if __name__ == '__main__':
