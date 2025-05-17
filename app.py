@@ -19,7 +19,11 @@ db = client["bus_scheduling"]
 drivers_collection = db["drivers"]
 assignments_collection = db["assignments"]
 schedules_collection = db["schedules"]
-
+notifications_collection = db["notifications"]
+trip_history_collection = db["trip_history"]
+issues_collection = db["issues"]
+performance_collection = db["performance"]
+help_collection = db["help"]
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587  
@@ -54,7 +58,6 @@ def unassigned_page():
     flash('Driver successfully unassigned!')
     return render_template('unassigned.html', drivers=unassigned_drivers)
  
-
 @app.route('/assign_driver', methods=['POST'])
 def assign_driver():
     driver_id = request.form.get('driver_id')
@@ -67,12 +70,29 @@ def assign_driver():
         "driver_id": ObjectId(driver_id),
         "date": date
     })
-
     if existing_schedule:
-        return render_template("shift.html",
-                               drivers=get_available_drivers(date),
-                               routes=["Route A", "Route B", "Route C"],
-                               message="Driver already assigned for this date.")
+        flash("Driver already assigned for this date.", "error")
+        return redirect(url_for('schedule'))
+
+    route_conflict = schedules_collection.find_one({
+        "date": date,
+        "shift_time": shift_time,
+        "bus_route": bus_route
+    })
+    if route_conflict:
+        flash(f"{bus_route} already has a {shift_time} shift assigned on {date}.", "error")
+        return redirect(url_for('schedule'))
+
+    date_obj = datetime.strptime(date, "%Y-%m-%d")
+    previous_day = (date_obj - timedelta(days=1)).strftime('%Y-%m-%d')
+    next_day = (date_obj + timedelta(days=1)).strftime('%Y-%m-%d')
+    consecutive_day_assignment = schedules_collection.find_one({
+        "driver_id": ObjectId(driver_id),
+        "date": {"$in": [previous_day, next_day]}
+    })
+    if consecutive_day_assignment:
+        flash("Driver cannot be scheduled for two consecutive days!", "error")
+        return redirect(url_for('schedule'))
 
     driver = drivers_collection.find_one({"_id": ObjectId(driver_id)})
     if driver and 'name' in driver:
@@ -106,7 +126,6 @@ def assign_driver():
 
     flash('Driver successfully assigned!')
     return redirect(url_for('schedule'))
-
 
 @app.route('/get_available_drivers/<date>')
 def get_available_drivers(date):
@@ -498,6 +517,72 @@ def auto_unassign_old_shifts():
             {"$set": {"status": "Unassigned"}} 
         )
         assignments_collection.delete_one({"_id": assign["_id"]})
+
+@app.route('/notifications')
+def notifications():
+    driver_id = session.get('driver_id')
+    notifications = notifications_collection.find({"driver_id": driver_id})
+    return render_template('notifications.html', notifications=notifications)
+@app.route('/trip_history')
+def trip_history():
+    driver_id = session.get('driver_id')
+    trips = trip_history_collection.find({"driver_id": driver_id})
+    return render_template('trip_history.html', trips=trips)
+
+@app.route('/report_issue', methods=['GET', 'POST'])
+def report_issue():
+    if request.method == 'POST':
+        driver_id = session.get('driver_id')
+        issue_text = request.form['issue']
+        if driver_id and issue_text:
+            issues_collection.insert_one({
+                "driver_id": driver_id,
+                "issue": issue_text,
+                "date_reported": datetime.utcnow()
+            })
+            flash('Issue reported successfully!')
+            return redirect('/dashboard')
+    return render_template('report_issue.html')
+
+@app.route('/')
+def show_issues():
+    for issue in issues:
+        if isinstance(issue.get('date_reported'), datetime):
+            continue
+    return render_template('issues.html', issues=issues)
+
+@app.route('/delete_issue/<issue_id>', methods=['POST'])
+def delete_issue(issue_id):
+    try:
+        result = issues_collection.delete_one({'_id': ObjectId(issue_id)})
+        if result.deleted_count == 1:
+            return jsonify({'status': 'success'})
+        else:
+            return jsonify({'status': 'fail', 'message': 'Issue not found'}), 404
+    except Exception as e:
+        return jsonify({'status': 'fail', 'message': str(e)}), 500
+    
+@app.route('/admin_notifications')
+def admin_notifications():
+    issues = list(issues_collection.find().sort('date_reported', -1)) 
+    return render_template('admin_notifications.html', issues=issues)
+
+@app.route('/performance')
+def performance():
+    driver_id = session.get('driver_id')
+    performance_data = performance_collection.find({"driver_id": driver_id})
+    return render_template('performance.html', performance_data=performance_data)
+
+@app.route('/help')
+def help_page():
+    help_data = help_collection.find()
+    return render_template('help.html', help_data=help_data)
+
+
+@app.route('/login')
+def login():
+    session['driver_id'] = 'D101'
+    return redirect('/dashboard')
 
 
 @app.route('/logout')

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report an Issue</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/report_issue.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+    <h2>Driver Dashboard</h2>
+    <ul>
+        <li><a href="/dashboard">Home</a></li>
+        <li><a href="/notifications">Notifications</a></li>
+    </ul>
+</div>
+    <h1>🚨 Report an Issue</h1>
+    
+    <form action="/report_issue" method="POST">
+        <label for="issue">Describe the issue:</label><br>
+        <textarea name="issue" rows="6" required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

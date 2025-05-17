@@ -7,7 +7,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 <body>
-    <h1>Follow Your Track! 🚍</h1>
+    
+    <div class="top-bar">
+        <div class="title">Follow Your Track! 🚌</div>
+        <div class="buttons">
+            <button onclick="location.href='/driver_profile'"><i class="fa fa-user"></i> Profile</button>
+            <button onclick="location.href='/logout'"><i class="fa fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </div>
     <h2>Know Your Schedules 📅</h2>
 
     {% if notifications %}
@@ -22,20 +29,15 @@
     {% endif %}
 
     <div class="image-container">
-        <div class="file-card">
-            <span class="emoji">📅</span>
-            <button onclick="location.href='{{ url_for('my_schedules') }}'">MY SCHEDULES</button>
-        </div>
-
-        <div class="file-card">
-            <span class="emoji">👤</span>
-            <button onclick="location.href='{{ url_for('driver_profile') }}'">MY PROFILE</button>
-        </div>
-
-        <div class="file-card">
-            <span class="emoji">🚪</span>
-            <button onclick="location.href='{{ url_for('logout') }}'">LOG OUT</button>
-        </div>
+    <div class="file-card">
+        <span class="emoji">📅</span>
+        <button onclick="location.href='{{ url_for('my_schedules') }}'">MY SCHEDULES</button>
     </div>
+    <div class="file-card">
+        <span class="emoji">📊</span>
+        <button onclick="location.href='{{ url_for('report_issue') }}'">REPORTS/ISSUES</button>
+    </div>
+</div>
+
 </body>
 </html>

@@ -4,112 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>All Drivers - Admin Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
-  <style>
-    .cards-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 20px;
-        padding: 20px;
-        justify-items: center;
-        background-color: #f0f4f8;
-        min-height: 90vh;
-        }
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_all_drivers.css') }}">
 
-        .driver-card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        width: 90%;
-        min-height: 250px; 
-        width: 80%;         
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        cursor: pointer;
-        transition: transform 0.2s ease-in-out;
-        }
-
-        .driver-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .driver-name {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 16px;
-        text-align: center;
-        }
-
-        .driver-info {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        font-size: 0.9rem;
-        color: #555;
-        flex-grow: 1; 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        }
-
-        .driver-info li {
-        padding: 6px 0;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        justify-content: space-between;
-        }
-
-        .driver-info li span {
-        font-weight: 600;
-        color: #34495e;
-        }
-
-        .sidebar {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100vh;
-        padding: 20px;
-        background: linear-gradient(135deg, #7ad5d8, #a1cae7);
-        border-radius: 0 20px 20px 0;
-        box-shadow: 3px 0 8px rgba(0,0,0,0.1);
-        }
-
-        .back-btn {
-        align-self: flex-start; 
-        margin-top: auto;     
-        padding: 10px 20px;
-        background-color: #3498db;
-        color: white;
-        border-radius: 8px;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        }
-
-        .back-btn:hover {
-        background-color: #2980b9;
-        }
-        .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 50px;
-        color: #dc2919;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s;
-     }
-
-
-  </style>
 </head>
 <body>
+  <div class="sidebar">
+        <h2>Driver Unscheduling</h2>
+        <button class="menu-button" onclick="location.href='{{ url_for('admin_dashboard') }}'">Home</button>
+        <button class="menu-button" onclick="location.href='{{ url_for('schedule') }}'">Schedule</button>
+        <button class="menu-button" onclick="location.href='{{ url_for('logout_admin') }}'">Logout</button>
+    </div>
   <div class="cards-container">
     {% for driver in drivers %}
       <div class="driver-card">
@@ -124,7 +28,6 @@
     {% endfor %}
   </div>
 <br>
-  <a class="back-link" href="{{ url_for('admin_dashboard') }}">← Back to Dashboard</a>
 
 </body>
 </html>

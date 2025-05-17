@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trip History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_history.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+    <h2>Driver Dashboard</h2>
+    <ul>
+        <li><a href="/dashboard">Home</a></li>
+        <li><a href="/notifications">Notifications</a></li>
+        <li><a href="/trip_history">Trip History</a></li>
+        <li><a href="/report_issue">Report Issue</a></li>
+        <li><a href="/help">Help</a></li>
+    </ul>
+</div>
+    <h1>🗓️ Trip History</h1>
+    <table>
+        <tr><th>Date</th><th>Route</th><th>Shift</th><th>Status</th></tr>
+        {% for trip in trips %}
+        <tr>
+            <td>{{ trip.date }}</td>
+            <td>{{ trip.route }}</td>
+            <td>{{ trip.shift }}</td>
+            <td>{{ trip.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

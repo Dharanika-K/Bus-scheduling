@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Notifications</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 {
+      margin: 0 0 20px 0;
+      font-weight: normal;
+      font-size: 22px;
+      border-bottom: 1px solid #34495e;
+      padding-bottom: 10px;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 12px 10px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .sidebar a:hover {
+      background-color: #34495e;
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+    .issue {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-left: 5px solid #3498db;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .date {
+      color: gray;
+      font-size: 12px;
+    }
+    button.resolve-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: #27ae60;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    button.resolve-btn:hover {
+      background: #2ecc71;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="/admin_dashboard">Dashboard</a>
+    <a href="/schedule">Scheduling</a>
+    <a href="/unscheduling">Unscheduling</a>
+  </div>
+
+  <div class="main-content">
+    <h1>🔔 Driver Issue Reports</h1>
+
+    {% if issues %}
+      {% for issue in issues %}
+        <div class="issue" id="issue-{{ issue._id }}">
+          <p><strong>Driver ID:</strong> {{ issue.driver_id }}</p>
+          <p>{{ issue.issue }}</p>
+          <p class="date">{{ issue.date_reported.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+          <button class="resolve-btn" onclick="markResolved('{{ issue._id }}')">Mark as Resolved</button>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No issues reported yet.</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function markResolved(issueId) {
+      fetch('/delete_issue/' + issueId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const issueDiv = document.getElementById('issue-' + issueId);
+          if (issueDiv) issueDiv.remove();
+        } else {
+          alert('Failed to resolve issue: ' + (data.message || 'Unknown error'));
+        }
+      })
+      .catch(err => alert('Error: ' + err));
+    }
+  </script>
+</body>
+</html>

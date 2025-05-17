@@ -5,12 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard - Bus Management</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+  <style>
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 30px;
+        background-color: #2c3e50;
+        color: white;
+    }
+    .top-bar .title {
+        font-size: 24px;
+    }
+    .top-bar .top-buttons button {
+        background-color: #e74c3c;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .top-bar .top-buttons button:hover {
+        background-color: #c0392b;
+    }
+  </style>
 </head>
 <body>
 
+  <div class="top-bar">
+    <div class="title">🚍 Admin Dashboard</div>
+    <div class="top-buttons">
+      
+      <button onclick="location.href='{{ url_for('logout_admin') }}'">🚪 Logout</button>
+    </div>
+  </div>
+
   <div class="dashboard-container">
-  
-    <h1 class="dashboard-title">🚍 Admin Dashboard</h1>
 
     <div class="dashboard-grid">
       <button class="dashboard-btn" onclick="location.href='{{ url_for('schedule') }}'">
@@ -21,16 +53,16 @@
         ❌ <span>Unschedule Drivers</span>
       </button>
 
+      <button class="dashboard-btn" onclick="location.href='{{ url_for('admin_notifications') }}'">
+        🔔<span>Notifications</span>
+      </button>
+
       <button class="dashboard-btn" onclick="location.href='{{ url_for('view_all_drivers') }}'">
         👥 <span>View All Drivers</span>
       </button>
 
       <button class="dashboard-btn" onclick="location.href='{{ url_for('filter_search') }}'">
         📊 <span>Reports</span>
-      </button>
-
-      <button class="dashboard-btn logout-btn" onclick="location.href='{{ url_for('logout_admin') }}'">
-        🚪 <span>Logout</span>
       </button>
     </div>
 

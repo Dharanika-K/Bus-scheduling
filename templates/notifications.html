@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Driver Notifications</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notifications.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+    <h2>Driver Dashboard</h2>
+    <ul>
+        <li><a href="/dashboard">Home</a></li>
+        <li><a href="/notifications">Notifications</a></li>
+        <li><a href="/trip_history">Trip History</a></li>
+        <li><a href="/report_issue">Report Issue</a></li>
+        <li><a href="/help">Help</a></li> 
+    </ul>
+</div>
+    <h1>🔔 Notifications</h1>
+    <div class="notification-list">
+        {% for note in notifications %}
+        <div class="note">{{ note }}</div>
+        {% else %}
+        <p>No new notifications.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
