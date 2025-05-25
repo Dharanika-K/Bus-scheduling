@@ -40,7 +40,7 @@ Clone the repository:
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/absrms.git
+git clone https://github.com/Dharanika-K/Bus-scheduling.git
 cd absrms
 Create a virtual environment and activate it:
 
