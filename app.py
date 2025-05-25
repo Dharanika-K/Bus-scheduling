@@ -12,7 +12,8 @@ from itsdangerous import URLSafeTimedSerializer
 from dotenv import load_dotenv
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "djmadl2025buschedule"  
-
+if os.environ.get("RENDER") != "true":
+    load_dotenv()
 load_dotenv()
 
 client = MongoClient(os.getenv("MONGO_URI"))
