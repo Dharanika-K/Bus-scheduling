@@ -1,3 +1,16 @@
+Click this link to run the application: https://bus-scheduling.onrender.com
+For admin login:
+  Username: admin
+  Password: secure123
+For driver login:
+  Username1: driver1
+  Password:123
+  Username2: driver2
+  Password: 123
+  Username3: Shreyas
+  Password: 123
+
+
 VIATRA is a comprehensive web application designed to automate bus scheduling, route management, and driver assignment. It streamlines daily operations for transit authorities by providing efficient scheduling, real-time driver management, and detailed reporting features.
 
 Features
@@ -30,7 +43,7 @@ Installation
 Prerequisites
 Python 3.8+
 
-MongoDB installed and running
+MongoDB 
 
 pip package manager
 
@@ -70,12 +83,5 @@ bash
 Copy
 Edit
 flask run
-Open your browser and navigate to http://localhost:5000
 
-Usage
-Admin Panel: Manage buses, routes, drivers, and schedules.
-
-Driver Login: Drivers can log in to view and manage their assigned shifts.
-
-Reports: Generate reports based on driver, date, or route.
 
