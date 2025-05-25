@@ -14,7 +14,7 @@ app.secret_key = "djmadl2025buschedule"
 
 
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient("mongodb+srv://23z317:dharani.28@cluster0.bkcce2w.mongodb.net/")
 db = client["bus_scheduling"]
 drivers_collection = db["drivers"]
 assignments_collection = db["assignments"]
@@ -314,24 +314,12 @@ def dashboard_page():
 
     driver = drivers_collection.find_one({'_id': ObjectId(driver_id)})
 
-    valid_notifications = []
-    if driver and 'notifications' in driver:
-        for notif in driver['notifications']:
-            if not notif.get("expiry_date"):  
-                valid_notifications.append(notif)
-            else:
-                try:
-                    expiry = datetime.strptime(notif['expiry_date'], '%Y-%m-%d')
-                    if expiry >= datetime.now():
-                        valid_notifications.append(notif)
-                except Exception:
-                    valid_notifications.append(notif)
-    try:
-        valid_notifications.sort(key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d'))
-    except Exception as e:
-        print("Sorting error:", e)
+    assignments = list(assignments_collection.find({
+            "driver_id": ObjectId(driver_id)
+        }))
 
-    return render_template('dashboard.html', notifications=valid_notifications)
+
+    return render_template('dashboard.html', notifications=assignments)
 
 
 @app.route('/shift_page')
@@ -521,11 +509,17 @@ def auto_unassign_old_shifts():
 @app.route('/notifications')
 def notifications():
     driver_id = session.get('driver_id')
-    notifications = notifications_collection.find({"driver_id": driver_id})
-    return render_template('notifications.html', notifications=notifications)
+    if not driver_id:
+        flash("Please log in first.", "error")
+        return redirect(url_for('login'))
+    current_notifications = assignments_collection.find({'driver_id': ObjectId(driver_id)}).sort('date', 1)
+
+    return render_template('notifications.html', notifications=current_notifications)
+
 @app.route('/trip_history')
 def trip_history():
     driver_id = session.get('driver_id')
+    
     trips = trip_history_collection.find({"driver_id": driver_id})
     return render_template('trip_history.html', trips=trips)
 

@@ -48,7 +48,7 @@
                 <tr>
                     <td>{{ driver._id }}</td>
                     <td>{{ driver.name }}</td>
-                    <td>{{ driver.route if driver.route else 'Unknown' }}</td>
+                    <td>{{ driver.bus_route if driver.route else 'Unknown' }}</td>
                     <td>{{ driver.shift_time }}</td>
                     <td>
                         <form action="{{ url_for('unschedule_driver', assignment_id=driver._id) }}" method="POST">

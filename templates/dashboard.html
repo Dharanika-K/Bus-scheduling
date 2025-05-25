@@ -22,11 +22,16 @@
         <h3>🔔 New Notifications</h3>
         <ul>
             {% for notification in notifications %}
-            <li>{{ notification.message }}</li>
+            <li>
+                New trip assigned on <strong>{{ notification.date }}</strong> .
+            </li>
             {% endfor %}
         </ul>
     </div>
+    {% else %}
+    <p>No new notifications.</p>
     {% endif %}
+
 
     <div class="image-container">
     <div class="file-card">
