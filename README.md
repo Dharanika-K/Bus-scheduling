@@ -58,7 +58,7 @@ bash
 Copy
 Edit
 git clone https://github.com/Dharanika-K/Bus-scheduling.git
-cd absrms
+cd bus-scheduling
 Create a virtual environment and activate it:
 
 bash
