@@ -7,6 +7,7 @@ from flask_mail import Mail, Message
 import re
 from datetime import datetime, timedelta
 import calendar
+import os
 from itsdangerous import URLSafeTimedSerializer
 from dotenv import load_dotenv
 app = Flask(__name__, template_folder="templates", static_folder="static")
