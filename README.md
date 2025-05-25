@@ -79,16 +79,3 @@ Driver Login: Drivers can log in to view and manage their assigned shifts.
 
 Reports: Generate reports based on driver, date, or route.
 
-Project Structure
-csharp
-Copy
-Edit
-absrms/
-├── app.py                 # Main Flask application
-├── templates/             # HTML templates
-├── static/
-│   ├── css/               # CSS files
-│   ├── js/                # JavaScript files
-├── models/                # Database models (if any)
-├── requirements.txt       # Python dependencies
-└── README.md              # Project documentation
