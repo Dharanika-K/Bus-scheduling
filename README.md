@@ -1,12 +1,16 @@
 Click this link to run the application: https://bus-scheduling.onrender.com
+
 For admin login:
   Username: admin
   Password: secure123
+  
 For driver login:
   Username1: driver1
-  Password:123
+  Password:123,
+  
   Username2: driver2
-  Password: 123
+  Password: 123,
+  
   Username3: Shreyas
   Password: 123
 
